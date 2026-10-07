@@ -1,0 +1,31 @@
+# Optional: deploy with the Vercel CLI from GitHub Actions instead of Vercel's Git integration.
+# Use this if Vercel will not connect to the repository directly (for example a Hobby account
+# with a repository owned by a GitHub organization). To turn it on, add the repository secret
+# VERCEL_TOKEN and the repository variables VERCEL_ORG_ID, VERCEL_PROJECT_ID and
+# DEPLOY_WITH_CLI=true (Settings → Secrets and variables → Actions).
+name: Vercel deploy (CLI)
+
+on:
+  push:
+    branches: ['**']
+
+jobs:
+  deploy:
+    if: vars.DEPLOY_WITH_CLI == 'true'
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ vars.VERCEL_PROJECT_ID }}
+      ENVIRONMENT: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install --global vercel@latest
+      - run: vercel pull --yes --environment=$ENVIRONMENT --token=${{ secrets.VERCEL_TOKEN }}
+      - run: vercel build ${{ github.ref == 'refs/heads/main' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+      - run: vercel deploy --prebuilt ${{ github.ref == 'refs/heads/main' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
