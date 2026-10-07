@@ -9,7 +9,7 @@ There are two ways to change the handbook. Both edit the same Markdown files, an
 3. Choose **English** or **中文**, then the module, and open a page. Lesson folders are shown as a tree.
 4. Edit the **Title**, **Syllabus Row ID** or **Page content**, then **Save**. Each save is one change in the history, under your name.
 5. Check the result on the **drafts preview** (the Vercel URL for the `drafts` branch, for example `…-git-drafts-….vercel.app`).
-6. When the edits are ready, open the **Publish dashboard edits** pull request on GitHub. It is opened automatically after your first save and updates itself afterwards. When CI is green, merge it with **Create a merge commit**. The live site updates about a minute later.
+6. When the edits are ready, open the **Publish dashboard edits** pull request on GitHub. It is opened automatically after your first save and updates itself afterwards. (If it does not appear, open the latest **Drafts** run under **Actions**: its summary has a link that opens it in one click.) When CI is green, merge it with **Create a merge commit**. The live site updates about a minute later.
 
 Things the dashboard does not handle well, which are easier in Git (section B):
 

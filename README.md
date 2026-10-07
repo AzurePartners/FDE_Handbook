@@ -58,4 +58,5 @@ To change the password, edit `SITE_PASSWORD` in Vercel and redeploy. The login l
 
 ### 3. GitHub
 
-Under **Settings → Branches**, protect `main`: require a pull request and the **CI / check** status check. Dashboard edits are unaffected, because they go to `drafts` and reach `main` through the "Publish dashboard edits" pull request.
+1. Let the drafts workflow open the "Publish dashboard edits" pull request: turn on **Allow GitHub Actions to create and approve pull requests** under **Settings → Actions → General → Workflow permissions**. For a repository owned by an organization, turn it on in the organization's settings first, or the repository option stays greyed out. Until then each save still works, and the Drafts run shows a warning with a link to open the pull request yourself.
+2. Under **Settings → Branches**, protect `main`: require a pull request and the **CI / check** status check. Dashboard edits are unaffected, because they go to `drafts` and reach `main` through the publish pull request.
