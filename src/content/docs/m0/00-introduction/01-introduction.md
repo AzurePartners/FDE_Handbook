@@ -1,7 +1,7 @@
 ---
 title: Introduction
 ---
-**In one sentence:** Module 0 is the map you read before anything else: what a Forward Deployed Engineer is accountable for, how the role differs from its neighbors, and which part of this handbook builds each capability the job needs.
+**In one sentence:** Module 0 Is the map you read before anything else: what a Forward Deployed Engineer is accountable for, how the role differs from its neighbors, and which part of this handbook builds each capability the job needs.
 
 ## What Module 0 is for
 
