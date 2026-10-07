@@ -2,6 +2,7 @@
 // Module cards for the home page, from src/data/modules.json (labels, hours, purpose).
 import { getCollection } from 'astro:content';
 import { modules } from '../data/modules.json';
+import { moduleHours, syllabusLessons } from '../lib/modules.mjs';
 
 interface Props {
   lang?: 'en' | 'zh';
@@ -23,8 +24,7 @@ const firstPage = (dir: string) => ids.find((id) => id.startsWith(`${dir}/`));
             {m.code} · {(lang === 'zh' && m.name_zh) || m.name}
           </a>
           <div class="meta">
-            {m.lessons.length} {lang === 'zh' ? '个章节' : 'sections'}
-            {m.minHours !== undefined && ` · ${m.minHours}–${m.maxHours} ${hours}`}
+            {syllabusLessons(m).length} {lang === 'zh' ? '课' : 'lessons'} · {moduleHours(m).minHours}–{moduleHours(m).maxHours} {hours}
           </div>
           {m.purpose && <p>{m.purpose}</p>}
         </li>

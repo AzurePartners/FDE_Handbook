@@ -58,7 +58,7 @@ Plus two Google Sheets: **AP_FDE_Master_Curriculum** (Module Overview, Master Sy
 | Dashboard | Pages CMS |
 | M4 and M5 | Use the new standalone M4 and M5 artifacts (the ones linked from the Module Overview), not the old combined M4–5 |
 | Review Log findings | Stay in the Google Sheet for now; no GitHub Issues |
-| Syllabus | Stays in Google Sheets |
+| Syllabus | Generated from the repository (decided later on 7 Oct, replacing "stays in Google Sheets"); the Google Sheet becomes a read-only mirror; the 7 practice rows stay as syllabus-only rows |
 | Module owners | None for now; any reviewer can approve any change |
 
 ## 4. Architecture as built
@@ -105,6 +105,7 @@ Plus two Google Sheets: **AP_FDE_Master_Curriculum** (Module Overview, Master Sy
 | 3. Checks | Done. CI workflow, content checks, unit tests for the login |
 | 4. Dashboard | Done in the repo; the Pages CMS app needs installing (README, One-time setup) |
 | Login | Done in the repo; set `SITE_USERNAME` / `SITE_PASSWORD` in Vercel |
+| Syllabus | Done. Generated from the pages + `modules.json` + `syllabus.json`; `/syllabus` page, CSV download, Sheet mirror workflow (needs the service account, README §4). Lesson titles, outcomes and hours were moved from the sheet; the first generated syllabus matched the sheet line for line except topic and resource text, which now come from the pages |
 
 Re-running the import (`npm run import -- --combined … --module M4=…`) regenerates the module folders from artifacts, so do not run it once people are editing in the repo.
 
@@ -112,11 +113,11 @@ Re-running the import (`npm run import -- --combined … --module M4=…`) regen
 
 1. **Connect Vercel** and set the two login variables (README, One-time setup). If Vercel's Hobby plan will not import an organization-owned repository, turn on the GitHub Actions deploy in `.github/workflows/vercel-deploy.yml`.
 2. **Install Pages CMS** on the repository and invite the editors.
-3. **Protect `main`**: require a pull request and the CI check.
-4. **Freeze the artifacts**: add a note to each published artifact pointing to the site, and change the Module Overview "Handbook Link" column to the site URLs.
-5. Later, as needed:
+3. **Set up the syllabus Sheet mirror** (README §4).
+4. **Protect `main`**: require a pull request and the CI check.
+5. **Freeze the artifacts**: add a note to each published artifact pointing to the site, and change the Module Overview "Handbook Link" column to the site URLs.
+6. Later, as needed:
    - a real sign-in method in place of the shared password;
    - a weekly external-link check (replaces the Resource Link Check tab);
-   - a nightly copy of the Master Syllabus from Sheets, so the check can also confirm every syllabus row has a page;
    - a print/PDF view of the whole handbook;
    - moving the Review Log into GitHub Issues.

@@ -3,11 +3,11 @@
     {
       "code": "M0",
       "dir": "m0",
-      "name": "Start Here: Understanding the FDE Role",
+      "name": "Start Here — Understanding the FDE Role",
       "name_zh": "从这里开始：理解 FDE 角色",
-      "minHours": 1.5,
-      "maxHours": 3,
       "purpose": "Give readers who don't yet know what an FDE is a map before any engineering: what the role is accountable for, how it differs from neighboring roles, and which module builds the capability each stage of FDE delivery needs. Orientation only, no engineering detail.",
+      "goal": "give readers who don't yet know what a Forward Deployed Engineer is a map before any engineering begins: what the role is accountable for, how it differs from neighboring roles, and which module builds the capability each stage of FDE delivery needs. Orientation only, with no engineering detail; read it first whatever your background.",
+      "notes": "Required for every background; read first",
       "lessons": [
         {
           "dir": "00-introduction",
@@ -16,18 +16,30 @@
         },
         {
           "dir": "01-what-is-an-fde",
-          "label": "Lesson 1 · What is a Forward Deployed Engineer?",
-          "label_zh": "第 1 课 · 什么是 Forward Deployed Engineer？"
+          "lesson": 1,
+          "label": "What Is a Forward Deployed Engineer?",
+          "label_zh": "什么是 Forward Deployed Engineer？",
+          "outcomes": "Explain what an FDE is accountable for, place any FDE job on the four-responsibility model, and explain why the role needs engineering, AI, delivery and business context at once.",
+          "minHours": 0.5,
+          "maxHours": 1
         },
         {
           "dir": "02-fde-vs-adjacent-roles",
-          "label": "Lesson 2 · FDE vs. adjacent roles",
-          "label_zh": "第 2 课 · FDE 与相邻岗位"
+          "lesson": 2,
+          "label": "FDE vs. Adjacent Roles",
+          "label_zh": "FDE 与相邻岗位",
+          "outcomes": "Compare an FDE with each neighboring role on responsibility rather than on who writes code, and use the three role tests to place a real job description.",
+          "minHours": 0.5,
+          "maxHours": 1
         },
         {
           "dir": "03-delivery-lifecycle-and-handbook-map",
-          "label": "Lesson 3 · The FDE delivery lifecycle and handbook map",
-          "label_zh": "第 3 课 · FDE 交付生命周期与手册地图"
+          "lesson": 3,
+          "label": "The FDE Delivery Lifecycle & Handbook Map",
+          "label_zh": "FDE 交付生命周期与手册地图",
+          "outcomes": "Name the lifecycle stages in order, say which module builds the capability each stage needs, and pick a reading path through the handbook from your background.",
+          "minHours": 0.5,
+          "maxHours": 1
         }
       ]
     },
@@ -36,9 +48,9 @@
       "dir": "m1",
       "name": "AI-Assisted Development & Software Systems Foundations",
       "name_zh": "AI 辅助开发与软件系统基础",
-      "minHours": 28,
-      "maxHours": 42,
       "purpose": "Build a mental model of modern software systems for beginners or technically rusty learners, and enable them to read, run, modify, debug, and deploy code with AI coding tools. The focus is system understanding rather than syntax memorization.",
+      "goal": "help beginners or technically rusty learners build a mental model of modern software systems and use AI coding tools to read, run, modify, debug, and deploy code. The emphasis is not memorizing syntax, but understanding how systems work.",
+      "notes": "Skip mastered modules based on the entry assessment",
       "lessons": [
         {
           "dir": "00-introduction",
@@ -47,33 +59,57 @@
         },
         {
           "dir": "01-ai-assisted-development",
-          "label": "Lesson 1 · AI-assisted development",
-          "label_zh": "Lesson 1 · AI 辅助开发"
+          "lesson": 1,
+          "label": "AI Coding Workspace & Vibe Coding Collaboration",
+          "label_zh": "AI 辅助开发",
+          "outcomes": "Set up an AI-assisted development workspace; read and modify small codebases; explain what submitted code actually does.",
+          "minHours": 4,
+          "maxHours": 6
         },
         {
           "dir": "02-how-web-apps-run",
-          "label": "Lesson 2 · How web apps run",
-          "label_zh": "Lesson 2 · Web 应用如何运行"
+          "lesson": 2,
+          "label": "How Modern Web Applications Actually Work",
+          "label_zh": "Web 应用如何运行",
+          "outcomes": "Draw the architecture of a simple application and explain how a request flows through the frontend, backend, database, and external services.",
+          "minHours": 5,
+          "maxHours": 7
         },
         {
           "dir": "03-apis-data-integration",
-          "label": "Lesson 3 · APIs, data & integration",
-          "label_zh": "Lesson 3 · API、数据与集成"
+          "lesson": 3,
+          "label": "API, Data & Systems Integration Foundations",
+          "label_zh": "API、数据与集成",
+          "outcomes": "Read API documentation, call external services, inspect returned data, and diagnose whether integration failures come from authentication, networking, formatting, or business logic.",
+          "minHours": 5,
+          "maxHours": 7
         },
         {
           "dir": "04-git-debugging-testing-security",
-          "label": "Lesson 4 · Git, debugging, testing & security",
-          "label_zh": "Lesson 4 · Git、调试、测试与安全"
+          "lesson": 4,
+          "label": "Git, Debugging, Testing & Security Basics",
+          "label_zh": "Git、调试、测试与安全",
+          "outcomes": "Maintain a traceable code repository, diagnose common errors, and demonstrate basic security and testing awareness.",
+          "minHours": 4,
+          "maxHours": 6
         },
         {
           "dir": "05-containers-deployment",
-          "label": "Lesson 5 · Containers & deployment",
-          "label_zh": "Lesson 5 · 容器与部署"
+          "lesson": 5,
+          "label": "Docker, Containers, Cloud & Basic Deployment",
+          "label_zh": "容器与部署",
+          "outcomes": "Understand core containerization and cloud deployment concepts; deploy an application using existing platforms and diagnose common deployment issues.",
+          "minHours": 5,
+          "maxHours": 8
         },
         {
           "dir": "06-reliability-scale",
-          "label": "Lesson 6 · Reliability & scale",
-          "label_zh": "Lesson 6 · 可靠性与扩展"
+          "lesson": 6,
+          "label": "Reliability, Async Work & Scalability Basics",
+          "label_zh": "可靠性与扩展",
+          "outcomes": "Recognize reliability and scalability issues that appear when moving from demo to real usage, and judge when queues, retries, or concurrency controls are needed.",
+          "minHours": 5,
+          "maxHours": 8
         },
         {
           "dir": "07-glossary",
@@ -86,67 +122,115 @@
       "code": "M2",
       "dir": "m2",
       "name": "AI Application Engineering",
-      "minHours": 28,
-      "maxHours": 43,
       "purpose": "Turn LLMs from “chat tools” into verifiable, integrable application capabilities. Use a Tutor / Customer Support RAG case to build foundations in prompting, RAG, tool calling, evaluation, and guardrails.",
+      "goal": "turn LLMs from “chat tools” into verifiable, integrable application capabilities. Use a Tutor / Customer Support RAG case to establish foundations in prompting, RAG, tool calling, evaluation, and guardrails.",
+      "notes": "Skip mastered modules based on the entry assessment",
       "lessons": [
         {
           "dir": "07-llm-application-foundations",
-          "label": "1. LLM Application Foundations"
+          "lesson": 1,
+          "label": "LLM Application Foundations: From Chat to Programmatic Use",
+          "outcomes": "Call an LLM from code, explain model inputs and outputs, and understand that good chat behavior does not equal system reliability.",
+          "minHours": 4,
+          "maxHours": 6
         },
         {
           "dir": "08-prompting-context-structured-output",
-          "label": "2. Prompting, Context and Structured Output"
+          "lesson": 2,
+          "label": "Prompting, Context & Structured Output",
+          "outcomes": "Design reusable prompts and structured-output contracts, and explain why prompts may fail in different contexts.",
+          "minHours": 4,
+          "maxHours": 6
         },
         {
           "dir": "09-rag-knowledge-bases",
-          "label": "3. RAG and Knowledge Bases"
+          "lesson": 3,
+          "label": "RAG & Knowledge Bases: Tutor / Support Assistant",
+          "outcomes": "Build a basic RAG assistant that cites sources, identifies knowledge gaps, and escalates to a human when evidence is insufficient.",
+          "minHours": 6,
+          "maxHours": 9
         },
         {
           "dir": "10-tool-calling-deterministic-logic",
-          "label": "4. Tool Calling and Deterministic Logic"
+          "lesson": 4,
+          "label": "Tool Calling & Deterministic Logic",
+          "outcomes": "Separate model judgment from deterministic execution, design a verifiable tool, and enable the LLM to call it correctly.",
+          "minHours": 5,
+          "maxHours": 8
         },
         {
           "dir": "11-ai-evaluation",
-          "label": "5. AI Evaluation"
+          "lesson": 5,
+          "label": "AI Evaluation: Proving It Actually Works",
+          "outcomes": "Build a minimum viable evaluation set, document failure cases, and use evidence rather than intuition to judge whether changes improve the system.",
+          "minHours": 5,
+          "maxHours": 8
         },
         {
           "dir": "12-safety-guardrails-hitl",
-          "label": "6. Safety, Guardrails and Human-in-the-Loop"
+          "lesson": 6,
+          "label": "Safety, Guardrails & Human-in-the-Loop",
+          "outcomes": "Define basic safety boundaries and human checkpoints for an AI application, without confusing “the model can answer” with “the model is allowed to act.”",
+          "minHours": 4,
+          "maxHours": 6
         }
       ]
     },
     {
       "code": "M3",
       "dir": "m3",
-      "name": "Agent Engineering",
-      "minHours": 31,
-      "maxHours": 49,
+      "name": "Agent Engineering — From Prompts to Scalable Agent Systems",
       "purpose": "Define an agent as a job with real boundaries, give it reusable skills backed by code where needed, choose between a workflow, a single agent and multiple agents, and make its state, long-running work and failures manageable. An agent is not simply a prompt, and more agents are not automatically better.",
+      "goal": "define an agent as a job with real boundaries (Profile, with Knowledge kept separate), give it reusable Skills backed by code where steps must repeat exactly, choose between a workflow, a single agent and multiple agents, then make its state, long-running work and failures manageable. An agent is not merely a prompt, and more agents do not automatically mean a better system.",
+      "notes": "Skip mastered modules based on the entry assessment",
       "lessons": [
         {
           "dir": "13-agent-profiles",
-          "label": "1. Agent Profiles and Boundaries"
+          "lesson": 1,
+          "label": "Start with Profile.md: Define an Agent with Real Boundaries",
+          "outcomes": "Define an agent with clear boundaries from business responsibilities rather than writing a one-line role prompt.",
+          "minHours": 4,
+          "maxHours": 6
         },
         {
           "dir": "14-agent-skills",
-          "label": "2. Agent Skills"
+          "lesson": 2,
+          "label": "Skills: Decompose Agent Capabilities into Reusable Units",
+          "outcomes": "Decompose a complex agent into maintainable, testable, reusable skills and identify where code is required.",
+          "minHours": 5,
+          "maxHours": 8
         },
         {
           "dir": "15-agent-architectures",
-          "label": "3. Workflows, Single Agents and Multi-Agent Systems"
+          "lesson": 3,
+          "label": "Workflow, Single Agent, or Multi-Agent?",
+          "outcomes": "Choose the simplest viable architecture based on task complexity and risk, and justify the design with business reasons rather than “multi-agent is more advanced.”",
+          "minHours": 6,
+          "maxHours": 9
         },
         {
           "dir": "16-agent-state-memory",
-          "label": "4. State, Memory and Context Persistence"
+          "lesson": 4,
+          "label": "State, Memory & Context Persistence",
+          "outcomes": "Design state and memory boundaries for agents, and distinguish “a lot of context” from reliable persistence.",
+          "minHours": 5,
+          "maxHours": 8
         },
         {
           "dir": "17-persistent-agents",
-          "label": "5. Persistent Agents"
+          "lesson": 5,
+          "label": "Persistent Agents: Queues, Recovery, Concurrency & HITL",
+          "outcomes": "Understand persistent-agent execution and explain how tasks are queued, recovered, deduplicated, and paused for human approval at critical points.",
+          "minHours": 6,
+          "maxHours": 10
         },
         {
           "dir": "18-agent-evaluation-debugging",
-          "label": "6. Agent Evaluation, Tracing and Debugging"
+          "lesson": 6,
+          "label": "Agent Evaluation, Tracing & Debugging",
+          "outcomes": "Locate failures within an agent workflow and use traces/evaluations—not endless prompt rewriting—to fix them.",
+          "minHours": 5,
+          "maxHours": 8
         }
       ]
     },
@@ -154,9 +238,9 @@
       "code": "M4",
       "dir": "m4",
       "name": "Enterprise Integration & Production AI",
-      "minHours": 27,
-      "maxHours": 42,
       "purpose": "Teach learners that real customer environments involve data, APIs, permissions, security, deployment, observability, cost, and reliability beyond prompts/agents, and develop judgment about when deeper engineering is required.",
+      "goal": "show that real customer environments involve data, APIs, permissions, security, deployment, observability, cost, and reliability beyond prompts and agents. Learners should know when deeper engineering is required.",
+      "notes": "Skip mastered modules based on the entry assessment",
       "lessons": [
         {
           "dir": "00-overview",
@@ -164,23 +248,43 @@
         },
         {
           "dir": "01-external-apis-mcp-and-connector-design",
-          "label": "Lesson 1 · External APIs, MCP & Connector Design"
+          "lesson": 1,
+          "label": "External APIs, MCP & Connector Design",
+          "outcomes": "Explain the difference between APIs and MCP, and connect external data or actions to agents through clear, replaceable interfaces.",
+          "minHours": 6,
+          "maxHours": 9
         },
         {
           "dir": "02-authentication-authorization-rbac-and-secrets",
-          "label": "Lesson 2 · Authentication, Authorization, RBAC & Secrets"
+          "lesson": 2,
+          "label": "Authentication, Authorization, RBAC & Secrets",
+          "outcomes": "Design a basic permission model and understand that prompts cannot replace real authentication and authorization controls.",
+          "minHours": 5,
+          "maxHours": 8
         },
         {
           "dir": "03-real-world-data-quality-freshness-provenance-and-entity",
-          "label": "Lesson 3 · Real-World Data: Quality, Freshness, Provenance & Entity Resolution"
+          "lesson": 3,
+          "label": "Real-World Data: Quality, Freshness, Provenance & Entity Resolution",
+          "outcomes": "Identify major risks in real data, design provenance/freshness/entity-alignment rules, and clearly state which conclusions remain unverified.",
+          "minHours": 6,
+          "maxHours": 9
         },
         {
           "dir": "04-reliability-cost-latency-and-scale",
-          "label": "Lesson 4 · Reliability, Cost, Latency & Scale"
+          "lesson": 4,
+          "label": "Reliability, Cost, Latency & Scale",
+          "outcomes": "Make basic performance and cost trade-offs and recognize when a demo architecture can no longer support real users.",
+          "minHours": 5,
+          "maxHours": 8
         },
         {
           "dir": "05-deployment-ci-cd-observability-and-production-readiness",
-          "label": "Lesson 5 · Deployment, CI/CD, Observability & Production Readiness"
+          "lesson": 5,
+          "label": "Deployment, CI/CD, Observability & Production Readiness",
+          "outcomes": "Explain what an AI application still needs to move from a local demo to an internal pilot and production, and produce basic deployment/run evidence.",
+          "minHours": 5,
+          "maxHours": 8
         }
       ]
     },
@@ -188,9 +292,9 @@
       "code": "M5",
       "dir": "m5",
       "name": "FDE Discovery, Consulting & Delivery",
-      "minHours": 39,
-      "maxHours": 62,
       "purpose": "Train the core capabilities that distinguish FDEs from typical AI Engineers: entering ambiguous customer environments, finding the real problem, defining outcomes, managing scope, making technical/business trade-offs, and driving pilots, acceptance, handoff, and productization.",
+      "goal": "train the core capabilities that distinguish an FDE from a typical AI Engineer—entering ambiguous customer environments, finding the real problem, defining outcomes, managing scope, making technical/business trade-offs, and driving pilots, acceptance, handoff, and productization.",
+      "notes": "Skip mastered modules based on the entry assessment",
       "lessons": [
         {
           "dir": "00-overview",
@@ -198,31 +302,59 @@
         },
         {
           "dir": "01-the-fde-role-and-end-to-end-delivery-lifecycle",
-          "label": "Lesson 1 · The FDE Role & End-to-End Delivery Lifecycle"
+          "lesson": 1,
+          "label": "The FDE Role & End-to-End Delivery Lifecycle",
+          "outcomes": "Understand the full scope of FDE work, recognize that technical capability is only one part, and complete a personal skill-gap assessment.",
+          "minHours": 4,
+          "maxHours": 6
         },
         {
           "dir": "02-customer-discovery-and-stakeholder-interviews",
-          "label": "Lesson 2 · Customer Discovery & Stakeholder Interviews"
+          "lesson": 2,
+          "label": "Customer Discovery & Stakeholder Interviews",
+          "outcomes": "Run a structured discovery session, identify key stakeholders, real problems, and information gaps, and produce reviewable interview notes.",
+          "minHours": 6,
+          "maxHours": 9
         },
         {
           "dir": "03-as-is-to-be-workflow-mapping-and-requirement-decomposition",
-          "label": "Lesson 3 · As-Is / To-Be Workflow Mapping & Requirement Decomposition"
+          "lesson": 3,
+          "label": "As-Is / To-Be Workflow Mapping & Requirement Decomposition",
+          "outcomes": "Translate ambiguous requests into clear business workflows and identify where AI should actually intervene.",
+          "minHours": 5,
+          "maxHours": 8
         },
         {
           "dir": "04-scope-prd-sow-acceptance-criteria-and-non-goals",
-          "label": "Lesson 4 · Scope, PRD/SOW, Acceptance Criteria & Non-Goals"
+          "lesson": 4,
+          "label": "Scope, PRD/SOW, Acceptance Criteria & Non-Goals",
+          "outcomes": "Write an implementable and testable mini PRD/SOW and protect the project from unlimited scope creep.",
+          "minHours": 5,
+          "maxHours": 8
         },
         {
           "dir": "05-solution-architecture-choose-the-simplest-architecture-that",
-          "label": "Lesson 5 · Solution Architecture: Choose the Simplest Architecture That Works"
+          "lesson": 5,
+          "label": "Solution Architecture: Choose the Simplest Architecture That Works",
+          "outcomes": "Choose the minimum viable architecture based on customer value, time, risk, and team capability, and explain how it can evolve later.",
+          "minHours": 5,
+          "maxHours": 8
         },
         {
           "dir": "06-demo-feedback-and-change-management",
-          "label": "Lesson 6 · Demo, Feedback & Change Management"
+          "lesson": 6,
+          "label": "Demo, Feedback & Change Management",
+          "outcomes": "Run a demo for non-technical stakeholders and clearly explain trade-offs when new requests appear instead of agreeing unconditionally.",
+          "minHours": 4,
+          "maxHours": 7
         },
         {
           "dir": "07-pilot-value-handoff-and-productization",
-          "label": "Lesson 7 · Pilot, Value, Handoff & Productization"
+          "lesson": 7,
+          "label": "Pilot, Value, Handoff & Productization",
+          "outcomes": "Design both business and technical metrics for a pilot and use evidence to explain project value and uncertainty. Hand a project over so others can run it and extract reusable assets rather than keeping all knowledge in one person’s head.",
+          "minHours": 10,
+          "maxHours": 16
         }
       ]
     },
@@ -231,9 +363,9 @@
       "dir": "m6",
       "name": "Four Representative FDE Use-Case Archetypes",
       "name_zh": "四个代表性 FDE 用例原型",
-      "minHours": 27,
-      "maxHours": 40,
       "purpose": "Use four realistic cases of increasing complexity to demonstrate the same FDE method repeatedly. Industry is the context; the goal is to understand why different business problems require different technical depth.",
+      "goal": "use four realistic cases of increasing complexity to repeatedly demonstrate the same FDE methodology. Industry is the context; the focus is understanding why different business problems require different levels of technical depth.",
+      "notes": "Skip mastered modules based on the entry assessment",
       "lessons": [
         {
           "dir": "00-introduction",
@@ -242,23 +374,39 @@
         },
         {
           "dir": "01-education-rag",
-          "label": "Lesson 1 · Tutor / support RAG",
-          "label_zh": "Lesson 1 · 辅导 / 客服 RAG"
+          "lesson": 1,
+          "label": "Education Tutor / Customer Support: RAG Application",
+          "label_zh": "辅导 / 客服 RAG",
+          "outcomes": "Understand and build one of the simplest enterprise AI applications, and recognize when RAG alone is sufficient.",
+          "minHours": 6,
+          "maxHours": 9
         },
         {
           "dir": "02-content-operations",
-          "label": "Lesson 2 · Content operations",
-          "label_zh": "Lesson 2 · 内容运营"
+          "lesson": 2,
+          "label": "Content Operations: Multi-Stage Content Production Workflow",
+          "label_zh": "内容运营",
+          "outcomes": "Decompose a content-operations process into agents/workflows and understand that multi-agent value comes from separation of responsibilities, not agent count.",
+          "minHours": 6,
+          "maxHours": 9
         },
         {
           "dir": "03-provider-research",
-          "label": "Lesson 3 · Provider research",
-          "label_zh": "Lesson 3 · 医疗机构研究"
+          "lesson": 3,
+          "label": "Healthcare Provider Research & Outreach: Data-Driven Prospecting",
+          "label_zh": "医疗机构研究",
+          "outcomes": "Break target-customer research and outreach into a verifiable data/automation pipeline and know which information requires human confirmation.",
+          "minHours": 7,
+          "maxHours": 10
         },
         {
           "dir": "04-trading-desk",
-          "label": "Lesson 4 · Trading desk",
-          "label_zh": "Lesson 4 · 交易研究台"
+          "lesson": 4,
+          "label": "Finance Research / Trading Desk: Complex Multi-Agent Decision Support",
+          "label_zh": "交易研究台",
+          "outcomes": "Understand why complex agent systems need multiple roles, tools, freshness controls, memory, and evaluation, and design a simplified research desk.",
+          "minHours": 8,
+          "maxHours": 12
         },
         {
           "dir": "05-cross-case",
@@ -277,9 +425,9 @@
       "dir": "m7",
       "name": "FDE End-to-End Practicum",
       "name_zh": "FDE 端到端实战",
-      "minHours": 52,
-      "maxHours": 78,
       "purpose": "Learners choose an approved customer-style use case and complete a full FDE delivery from Discovery through Release/Handoff. This is the core job-search portfolio module and is not tied to a fixed number of weeks.",
+      "goal": "learners choose an approved customer-style use case and complete a full FDE delivery from Discovery through Release/Handoff. This is the core portfolio module and is not tied to a fixed number of weeks; learners can progress based on their available effort.",
+      "notes": "Skip mastered modules based on the entry assessment",
       "lessons": [
         {
           "dir": "00-overview",
@@ -288,33 +436,57 @@
         },
         {
           "dir": "01-practicum-kickoff",
-          "label": "1. Practicum Kickoff: Discovery & Project Selection",
-          "label_zh": "1. 实战启动：需求发现与项目选择"
+          "lesson": 1,
+          "label": "Practicum Kickoff: Discovery & Project Selection",
+          "label_zh": "实战启动：需求发现与项目选择",
+          "outcomes": "Produce an approved Problem Brief and Discovery Pack demonstrating that the project is worth designing and building.",
+          "minHours": 6,
+          "maxHours": 10
         },
         {
           "dir": "02-architecture-mvp-freeze",
-          "label": "2. Architecture & MVP Freeze",
-          "label_zh": "2. 架构与 MVP 冻结"
+          "lesson": 2,
+          "label": "Architecture & MVP Freeze",
+          "label_zh": "架构与 MVP 冻结",
+          "outcomes": "Produce an executable MVP design and explain each architecture choice, technical debt item, and deferred feature.",
+          "minHours": 10,
+          "maxHours": 14
         },
         {
           "dir": "03-alpha-build",
-          "label": "3. Alpha Build: First End-to-End Happy Path",
-          "label_zh": "3. Alpha 构建：打通第一条端到端主路径"
+          "lesson": 3,
+          "label": "Alpha Build: Complete the First End-to-End Happy Path",
+          "label_zh": "Alpha 构建：打通第一条端到端主路径",
+          "outcomes": "Complete a reproducible Alpha Release proving that the core business path runs from input to output.",
+          "minHours": 12,
+          "maxHours": 18
         },
         {
           "dir": "04-evaluation-hardening",
-          "label": "4. Evaluation & Hardening",
-          "label_zh": "4. 评测与加固"
+          "lesson": 4,
+          "label": "Evaluation & Hardening",
+          "label_zh": "评测与加固",
+          "outcomes": "Complete a Beta with evaluation results, a failure report, and prioritized reliability improvements—not just a successful demo path.",
+          "minHours": 10,
+          "maxHours": 14
         },
         {
           "dir": "05-proxy-testing-release-candidate",
-          "label": "5. Pilot / Proxy User Testing & Release Candidate",
-          "label_zh": "5. 试点 / 代理用户测试与候选发布版本"
+          "lesson": 5,
+          "label": "Pilot / Proxy User Testing & Release Candidate",
+          "label_zh": "试点 / 代理用户测试与候选发布版本",
+          "outcomes": "Use real or proxy-user evidence to determine whether the system is worth continuing and complete a demonstrable Release Candidate.",
+          "minHours": 8,
+          "maxHours": 12
         },
         {
           "dir": "06-demo-handoff-postmortem",
-          "label": "6. Client Demo, Stakeholder Defense, Handoff & Postmortem",
-          "label_zh": "6. 客户演示、利益相关方答辩、交接与复盘"
+          "lesson": 6,
+          "label": "Client Demo, Stakeholder Defense, Handoff & Postmortem",
+          "label_zh": "客户演示、利益相关方答辩、交接与复盘",
+          "outcomes": "Complete an end-to-end FDE project suitable for interviews and a portfolio, demonstrating not only agent building but full delivery ownership.",
+          "minHours": 6,
+          "maxHours": 10
         }
       ]
     },
@@ -323,9 +495,9 @@
       "dir": "m8",
       "name": "Career Preparation & FDE Interviews",
       "name_zh": "就业准备与 FDE 面试",
-      "minHours": 15,
-      "maxHours": 25,
       "purpose": "Turn real curriculum and practicum outputs into verifiable job-search evidence, and prepare for common FDE interviews in engineering, system design, problem decomposition, customer communication, and project deep dives.",
+      "goal": "turn real curriculum and practicum outputs into verifiable job-search evidence, and prepare for common FDE interviews covering engineering, system design, problem decomposition, customer communication, and project deep dives.",
+      "notes": "Skip mastered modules based on the entry assessment",
       "lessons": [
         {
           "dir": "00-introduction",
@@ -334,23 +506,39 @@
         },
         {
           "dir": "01-portfolio-case-study-resume",
-          "label": "Lesson 1 · Portfolio, case study and resume packaging",
-          "label_zh": "第 1 课 · Portfolio、Case Study 与 Resume Packaging"
+          "lesson": 1,
+          "label": "Portfolio, Case Study & Resume Packaging",
+          "label_zh": "Portfolio、Case Study 与 Resume Packaging",
+          "outcomes": "Turn course outputs into a credible, explainable, and verifiable FDE resume and portfolio.",
+          "minHours": 4,
+          "maxHours": 6
         },
         {
           "dir": "02-coding-debugging-system-design",
-          "label": "Lesson 2 · Coding, debugging and system design interviews",
-          "label_zh": "第 2 课 · Coding / Debugging 与 System Design 面试"
+          "lesson": 2,
+          "label": "Coding / Debugging & System Design Interviews",
+          "label_zh": "Coding / Debugging 与 System Design 面试",
+          "outcomes": "Explain and modify code in interviews and complete practical system designs aligned with FDE work.",
+          "minHours": 4,
+          "maxHours": 7
         },
         {
           "dir": "03-fde-case-decomposition-customer-simulation",
-          "label": "Lesson 3 · FDE case: problem decomposition and customer simulation",
-          "label_zh": "第 3 课 · FDE Case：Problem Decomposition 与 Customer Simulation"
+          "lesson": 3,
+          "label": "FDE Case: Problem Decomposition & Customer Simulation",
+          "label_zh": "FDE Case：Problem Decomposition 与 Customer Simulation",
+          "outcomes": "Structure ambiguous customer problems, propose verifiable solutions, and communicate with non-technical stakeholders.",
+          "minHours": 4,
+          "maxHours": 7
         },
         {
           "dir": "04-role-matching-narrative-job-search",
-          "label": "Lesson 4 · Role matching, interview narrative and job-search strategy",
-          "label_zh": "第 4 课 · 岗位匹配、面试叙事与求职策略"
+          "lesson": 4,
+          "label": "Role Matching, Interview Narrative & Job-Search Strategy",
+          "label_zh": "岗位匹配、面试叙事与求职策略",
+          "outcomes": "Define a personal job-market position, project narrative, and follow-up skill-gap roadmap, and identify which FDE/adjacent roles fit best.",
+          "minHours": 3,
+          "maxHours": 5
         }
       ]
     }

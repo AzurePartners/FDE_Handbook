@@ -1,0 +1,116 @@
+---
+// The Master Syllabus, generated from the handbook pages and src/data at build time.
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { buildSyllabus } from '../lib/syllabus.mjs';
+import { formatHours } from '../lib/modules.mjs';
+
+const { syllabus, problems } = buildSyllabus();
+if (problems.length) throw new Error(`Syllabus problems:\n${problems.join('\n')}`);
+
+const total = syllabus.modules.reduce(
+  (t, m) => ({ lessons: t.lessons + m.lessons.length, min: t.min + m.minHours, max: t.max + m.maxHours }),
+  { lessons: 0, min: 0, max: 0 },
+);
+const headings = syllabus.modules.map((m) => ({ depth: 2, slug: m.dir, text: `${m.code} · ${m.name}` }));
+const built = new Date().toISOString().slice(0, 10);
+---
+
+<StarlightPage frontmatter={{ title: 'Syllabus', description: syllabus.title, tableOfContents: { maxHeadingLevel: 2 } }} headings={headings}>
+  <div class="syllabus">
+    {syllabus.intro.map((t) => <p>{t}</p>)}
+    <p class="syllabus-note">
+      Generated from the handbook on {built}: topics and resources come from each page, and lesson outcomes and study
+      times from <strong>Modules &amp; lessons</strong> in the dashboard. To change the syllabus, change those.{' '}
+      <a href="/syllabus.csv" download>Download as CSV</a> (opens in Excel or Google Sheets).
+    </p>
+
+    <h2 id="overview">Module overview</h2>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Module</th><th>Lessons</th><th>Study time</th><th>Purpose</th></tr></thead>
+        <tbody>
+          {syllabus.modules.map((m) => (
+            <tr>
+              <td><a href={`#${m.dir}`}>{m.code} · {m.name}</a></td>
+              <td>{m.lessons.length}</td>
+              <td class="nowrap">{formatHours(m.minHours, m.maxHours)}</td>
+              <td>{m.purpose}</td>
+            </tr>
+          ))}
+          <tr class="total">
+            <td>Full path</td>
+            <td>{total.lessons}</td>
+            <td class="nowrap">{formatHours(Math.round(total.min * 10) / 10, Math.round(total.max * 10) / 10)}</td>
+            <td>{syllabus.fullPath.purpose}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    {syllabus.modules.map((m) => (
+      <section>
+        <h2 id={m.dir}>{m.code} · {m.name}</h2>
+        <p><strong>Goal:</strong> {m.goal}</p>
+        <p class="syllabus-meta">{m.lessons.length} lessons · {formatHours(m.minHours, m.maxHours)} · {m.notes}</p>
+        {m.lessons.map((l) => (
+          <>
+            <h3 id={`${m.dir}-l${l.lesson}`}>Lesson {l.lesson} · {l.title}</h3>
+            <p class="syllabus-meta">{formatHours(l.minHours, l.maxHours)}</p>
+            <p><strong>Learning outcomes:</strong> {l.outcomes}</p>
+            <div class="tbl">
+              <table class="rows">
+                <thead><tr><th>Row ID</th><th>What you learn</th><th>Resources</th></tr></thead>
+                <tbody>
+                  {l.rows.map((r) => (
+                    <tr>
+                      <td class="nowrap"><code>{r.row}</code></td>
+                      <td>
+                        {r.practice ? (
+                          <>
+                            <span class="tag">Practice</span> {r.topics}
+                          </>
+                        ) : (
+                          r.pages.map((p) => (
+                            <p>
+                              <a href={`/${p.id}/`}>{p.title}</a>: {p.summary}
+                            </p>
+                          ))
+                        )}
+                      </td>
+                      <td>
+                        <ul>
+                          {r.resourceItems.map((x) => (
+                            <li>
+                              {x.urls.length ? <a href={x.urls[0]}>{x.text}</a> : x.text}
+                              {x.urls.slice(1).map((u, i) => <> · <a href={u}>link {i + 2}</a></>)}
+                            </li>
+                          ))}
+                        </ul>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ))}
+      </section>
+    ))}
+  </div>
+</StarlightPage>
+
+<style>
+  .syllabus-note { font-size: var(--sl-text-sm); color: var(--sl-color-gray-3); }
+  .syllabus-meta { font-size: var(--sl-text-sm); color: var(--sl-color-gray-3); margin-top: 0.25rem; }
+  .tbl { overflow-x: auto; }
+  .syllabus table { font-size: var(--sl-text-sm); display: table; width: 100%; }
+  .syllabus td, .syllabus th { vertical-align: top; }
+  .syllabus td p { margin: 0 0 0.4rem; }
+  .syllabus td ul { margin: 0; padding-left: 1rem; }
+  .syllabus table.rows td:nth-child(2) { min-width: 18rem; }
+  .syllabus table.rows td:nth-child(3) { min-width: 14rem; }
+  .nowrap { white-space: nowrap; }
+  .total td { font-weight: 600; }
+  .tag { font-size: var(--sl-text-xs); font-weight: 600; padding: 0.05rem 0.4rem; border-radius: 0.25rem;
+    background: var(--sl-color-accent-low); color: var(--sl-color-accent-high); }
+</style>

@@ -4,22 +4,24 @@ import starlight from '@astrojs/starlight';
 import { fileURLToPath } from 'node:url';
 import data from './src/data/modules.json' with { type: 'json' };
 import remarkMdLinks from './src/plugins/remark-md-links.mjs';
+import { lessonLabel } from './src/lib/modules.mjs';
 
 const ZH = 'zh-CN';
 
-// One collapsible group per module, one sub-group per lesson; pages inside a lesson are
-// listed in file-name order (the numeric prefixes), so adding a page needs no config change.
-const sidebar = data.modules.map((m) => ({
+// The generated syllabus first, then one collapsible group per module and one sub-group per
+// lesson; pages inside a lesson are listed in file-name order (the numeric prefixes), so adding
+// a page needs no config change.
+const sidebar = [{ label: 'Syllabus', translations: { [ZH]: '课程大纲' }, link: '/syllabus/' }, ...data.modules.map((m) => ({
   label: `${m.code} · ${m.name}`,
   translations: m.name_zh ? { [ZH]: `${m.code} · ${m.name_zh}` } : {},
   collapsed: true,
   items: m.lessons.map((l) => ({
-    label: l.label,
-    translations: l.label_zh ? { [ZH]: l.label_zh } : {},
+    label: lessonLabel(l),
+    translations: l.label_zh ? { [ZH]: lessonLabel(l, 'zh') } : {},
     collapsed: true,
     items: [{ autogenerate: { directory: `${m.dir}/${l.dir}` } }],
   })),
-}));
+}))];
 
 export default defineConfig({
   site: process.env.SITE_URL,

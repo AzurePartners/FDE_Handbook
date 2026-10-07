@@ -20,5 +20,6 @@ Follow CONTRIBUTING.md "How pages are written". In short:
 
 ## Structure changes
 
-- A new lesson folder must be added to `src/data/modules.json` (with `label` and, if translated, `label_zh`), or it will not appear in the sidebar.
+- A new lesson folder must be added to `src/data/modules.json` (with `label`, `label_zh` if translated, and for a syllabus lesson its `lesson` number, `outcomes`, `minHours` and `maxHours`), or it will not appear in the sidebar or the syllabus.
 - File and folder names start with a two-digit order prefix. When renaming or moving a page, update every link to it; `npm run check` lists the broken ones.
+- The syllabus is generated (src/lib/syllabus.mjs) from page titles, Row IDs, "In one sentence" lines and "Learn more" lists, plus src/data/modules.json (lesson titles, outcomes, hours) and src/data/syllabus.json (practice rows). Never edit the Google Sheet's Module Overview or Master Syllabus tabs; they are overwritten. A page's Row ID must match the lesson number of its folder.

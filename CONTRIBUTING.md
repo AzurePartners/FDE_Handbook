@@ -72,4 +72,17 @@ A translation lives at the same path under `src/content/docs/zh/`. If it is miss
 
 ## Syllabus
 
-The Master Syllabus stays in the Google Sheet. When a page's Row ID or title changes, update the sheet's row to match.
+The syllabus is generated from the handbook, so there is nothing to keep in sync by hand. See it on the site under **Syllabus** (top of the sidebar), download it as CSV from there, or read the Google Sheet copy. The sheet's Module Overview and Master Syllabus tabs are rewritten after every publish, so don't edit them.
+
+| To change… | Edit… |
+|---|---|
+| A row's topic title | the page's **Title** |
+| A row's description | the page's **In one sentence** line |
+| A row's resources | the page's **Learn more** list |
+| Which row a page covers | the page's **Syllabus Row ID** |
+| A lesson's title, learning outcomes or study time | **Modules & lessons** in the dashboard (`src/data/modules.json`) |
+| A module's name, goal, purpose or notes | **Modules & lessons** |
+| A module's total study time | the study time of its lessons (it is their sum) |
+| Practice rows without a page, the syllabus intro | **Syllabus** in the dashboard (`src/data/syllabus.json`) |
+
+A page's Row ID must belong to the lesson of the folder it sits in (a page in Lesson 3's folder has an `M…-L3.…` Row ID); the check reports any mismatch.

@@ -4,13 +4,17 @@
 //
 // Errors:   missing title · malformed Row ID · link to a page that does not exist ·
 //           claude.ai artifact link · 中文 page with no English page · module or lesson folder
-//           missing from src/data/modules.json (it would not appear in the sidebar)
-// Warnings: page missing template sections · English page changed after its 中文 translation
+//           missing from src/data/modules.json (it would not appear in the sidebar) ·
+//           Row ID of a different lesson than the page's folder · syllabus problems (a Row ID
+//           whose lesson is not in modules.json, a practice row that also has a page)
+// Warnings: page missing template sections · English page changed after its 中文 translation ·
+//           syllabus lesson without learning outcomes or study time
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import YAML from 'yaml';
+import { buildSyllabus } from '../src/lib/syllabus.mjs';
 
 const DOCS = 'src/content/docs';
 const ZH = 'zh';
@@ -36,6 +40,7 @@ const walk = (dir) =>
 
 const { modules } = JSON.parse(fs.readFileSync('src/data/modules.json', 'utf8'));
 const lessonDirs = new Set(modules.flatMap((m) => m.lessons.map((l) => `${m.dir}/${l.dir}`)));
+const lessonNumber = new Map(modules.flatMap((m) => m.lessons.map((l) => [`${m.dir}/${l.dir}`, l.lesson])));
 const files = walk(DOCS);
 const rel = (f) => path.relative(DOCS, f).split(path.sep).join('/');
 const exists = (r) => fs.existsSync(path.join(DOCS, r));
@@ -66,6 +71,14 @@ for (const file of files) {
   }
   if (!lessonDirs.has(`${mod}/${lesson}`)) {
     err(r, `folder ${mod}/${lesson} is not listed in src/data/modules.json, so it would not appear in the sidebar`);
+  } else if (fm.row && ROW.test(fm.row)) {
+    // The sidebar files the page under its folder, the syllabus under its Row ID: they must agree.
+    const [, rowMod, rowLesson] = fm.row.match(/^M(\d)-L(\d+)\./);
+    const n = lessonNumber.get(`${mod}/${lesson}`);
+    if (`m${rowMod}` !== mod || Number(rowLesson) !== n) {
+      err(r, `Row ID ${fm.row} belongs to Module ${rowMod} Lesson ${rowLesson}, but the page is in ${mod}/${lesson}` +
+        (n == null ? ' (a folder that is not a syllabus lesson)' : ` (Lesson ${n})`));
+    }
   }
   if (isZh && !exists(enRel)) err(r, `中文 page has no English page at ${enRel}`);
   if (/claude\.ai\/(code\/)?artifact\//.test(body)) {
@@ -84,6 +97,17 @@ for (const file of files) {
       const missing = TEMPLATE.en.filter((h) => !body.includes(`\n${h}\n`));
       if (missing.length) warn('template', r, `missing sections: ${missing.map((h) => h.slice(3)).join(', ')}`);
     }
+  }
+}
+
+// Syllabus: everything the generated syllabus needs must be present.
+for (const p of buildSyllabus().problems) errors.push(p);
+for (const m of modules) {
+  const numbers = m.lessons.filter((l) => l.lesson != null).map((l) => l.lesson);
+  if (new Set(numbers).size !== numbers.length) errors.push(`src/data/modules.json: ${m.code} has two folders with the same lesson number`);
+  for (const l of m.lessons.filter((x) => x.lesson != null)) {
+    const missing = ['outcomes', 'minHours', 'maxHours'].filter((k) => l[k] === undefined || l[k] === '' || l[k] === null);
+    if (missing.length) warn('syllabus', `src/data/modules.json`, `${m.code} Lesson ${l.lesson} has no ${missing.join(', ')}`);
   }
 }
 
@@ -114,6 +138,7 @@ try {
 const kinds = {
   template: 'pages missing template sections',
   'stale-translation': '中文 pages older than their English page',
+  syllabus: 'syllabus lessons missing learning outcomes or study time',
 };
 console.log(`Checked ${files.length} pages.`);
 for (const [kind, label] of Object.entries(kinds)) {

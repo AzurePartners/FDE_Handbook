@@ -10,6 +10,8 @@
 // --module    a standalone module artifact that replaces that module from the combined file.
 //             All four page formats the artifacts have used are understood (see normalize()).
 // --overview  optional JSON keyed by module code ({"M0": {"purpose", "minHours", "maxHours"}}).
+// --write-modules  also rewrite src/data/modules.json. Off by default once that file exists,
+//             because it now holds syllabus data (lesson outcomes, hours) the artifacts don't have.
 //
 // Every internal link (combined-file page keys, in-page anchors, relative .md paths and
 // claude.ai artifact URLs) is rewritten to a relative path to the target .md file. Links that
@@ -46,6 +48,7 @@ const opt = { modules: {} };
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--combined') opt.combined = args[++i];
   else if (args[i] === '--overview') opt.overview = args[++i];
+  else if (args[i] === '--write-modules') opt.writeModules = true;
   else if (args[i] === '--module') {
     const [code, file] = args[++i].split('=');
     opt.modules[code.toLowerCase()] = file;
@@ -244,7 +247,11 @@ for (const mod of [...new Set(pages.map((p) => p.mod))].sort()) {
   });
 }
 fs.mkdirSync('src/data', { recursive: true });
-fs.writeFileSync('src/data/modules.json', JSON.stringify({ modules }, null, 2) + '\n');
+if (opt.writeModules || !fs.existsSync('src/data/modules.json')) {
+  fs.writeFileSync('src/data/modules.json', JSON.stringify({ modules }, null, 2) + '\n');
+} else {
+  console.log('Kept the existing src/data/modules.json (pass --write-modules to replace it).');
+}
 
 console.log(`Wrote ${count.en} EN pages and ${count.zh} 中文 pages for ${modules.length} modules.`);
 if (unresolved.length) {
