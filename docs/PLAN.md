@@ -1,6 +1,6 @@
 # FDE Handbook on GitHub: system plan
 
-Status: proposal, 7 Oct 2026. Nothing below is built yet; section 9 lists the decisions needed before Phase 1 starts.
+Status: Phases 1–4 built on 7 Oct 2026 (see §5). Decisions are recorded in §3.
 
 ## 1. Goal
 
@@ -12,9 +12,10 @@ Run the FDE Handbook (Modules 0–8, EN/中文) from one GitHub repository so th
    - **Developers:** edit files locally or in GitHub, push, open a pull request.
    - **Non-developers:** edit text in a web dashboard, no Git knowledge needed.
 4. Every merged change deploys automatically (Vercel), and every proposed change gets a preview link before it goes live.
-5. The checks the review team ran by hand (syllabus row coverage, Row IDs, template sections, internal links, link rot) run automatically on every change.
+5. The checks the review team ran by hand (Row IDs, template sections, internal links) run automatically on every change.
+6. The site is private.
 
-## 2. What exists today (audited 7 Oct 2026)
+## 2. Starting point (audited 7 Oct 2026)
 
 | Module | Pages | Languages | How content is stored inside the artifact |
 |---|---|---|---|
@@ -46,207 +47,76 @@ Plus two Google Sheets: **AP_FDE_Master_Curriculum** (Module Overview, Master Sy
 2. **The modules use 4 different formats**, so no single script can check or rebuild them all.
 3. **There is no history.** The Changelog tab is written by hand, and one row already reads `#ERROR!` (F003).
 4. **The syllabus and the handbook drift apart.** Review findings F001, F004 and F005 are drift between the sheet and the pages, and only a scripted check found them.
-5. **The combined handbook is a copy of the modules**, so every fix has to be made twice.
+5. **The combined handbook is a copy of the modules**, so every fix has to be made twice. It had also fallen behind: its M4 and M5 are the old combined "Modules 4–5" text, and its M6 lacks the n8n reference-build page added on 2 Oct.
 
-## 3. Target architecture
+## 3. Decisions (7 Oct 2026)
 
-```text
-                   ┌──────────────────────── GitHub repo (single source of truth) ─────────────────────────┐
- Developers ──PR──►│  content/en/m0…m8/**/*.md      content/zh/m0…m8/**/*.md      syllabus/*.csv          │
-                   │  module.yml per module         scripts/ (import, check, export)  .github/workflows   │
- Dashboard ─commit►│                                                                                      │
- (Pages CMS)       └───────────────┬──────────────────────────────┬──────────────────────────────┬─────────┘
-                                   │ every push / PR              │ every PR                     │ nightly / manual
-                                   ▼                              ▼                              ▼
-                        Vercel build (Astro + Starlight)   GitHub Actions: content checks   Sheets → syllabus/*.csv
-                          ├─ PR / branch → Preview URL       (schema, rows, links,          (opens a PR if the
-                          └─ main → Production site           sections, translations)        syllabus changed)
-                                   │
-                                   ├─ /en/…  /zh/…  per-module pages + search
-                                   ├─ /handbook  combined view of all modules (generated)
-                                   └─ optional: single-file HTML per module + combined, PDF
-```
-
-**Core rule: Markdown files in Git are the only thing anyone edits. HTML is always build output.** The website, the combined handbook, any single-file artifact export and any PDF are generated from the same files, so a fix made once appears everywhere.
-
-### 3.1 Repository layout
-
-```text
-FDE_Handbook/
-├─ content/
-│  ├─ en/
-│  │  ├─ m0/
-│  │  │  ├─ module.yml                       # module title, lessons, order, hours (EN/ZH labels)
-│  │  │  ├─ 00-introduction/01-introduction.md
-│  │  │  ├─ 01-what-is-an-fde/01-forward-deployed-engineer.md
-│  │  │  └─ …
-│  │  ├─ m1/ … m8/
-│  └─ zh/                                    # same tree; a missing file falls back to EN with a notice
-├─ syllabus/
-│  ├─ module-overview.csv                    # synced from the Master Curriculum sheet
-│  ├─ master-syllabus.csv
-│  └─ background-pathways.csv
-├─ src/                                      # site code: Astro + Starlight theme, components
-├─ scripts/
-│  ├─ import-artifact.ts                     # artifact HTML (any of the 4 formats) → Markdown files
-│  ├─ check-content.ts                       # syllabus/handbook validator (see §6)
-│  ├─ sync-syllabus.ts                       # Google Sheets → syllabus/*.csv
-│  ├─ export-artifact.ts                     # Markdown → single-file HTML (current viewer look)
-│  └─ import-findings.ts                     # Review Log → GitHub Issues (one-off)
-├─ .github/
-│  ├─ workflows/ci.yml, links.yml, sync-syllabus.yml, publish-drafts.yml
-│  ├─ ISSUE_TEMPLATE/finding.yml, decision.yml
-│  ├─ pull_request_template.md
-│  └─ CODEOWNERS                             # module owner reviews changes to their module
-├─ .pages.yml                                # dashboard (Pages CMS) configuration
-├─ CLAUDE.md                                 # authoring rules for AI-assisted edits
-├─ CONTRIBUTING.md                           # how to edit, for both developers and dashboard users
-└─ CHANGELOG.md                              # seeded from the Changelog tab, then generated per release
-```
-
-Folder and file names keep the existing page ids (`01-what-is-an-fde.01-forward-deployed-engineer` becomes `01-what-is-an-fde/01-forward-deployed-engineer.md`), so existing relative links keep working unchanged.
-
-### 3.2 Page format
-
-```markdown
----
-title: Forward Deployed Engineer
-row: M0-L1.1                 # join key to the Master Syllabus
-rows: [M0-L1.1]              # optional, for pages that cover several rows (M6)
-summary: An FDE is an engineer embedded with a specific customer who is accountable for …
----
-
-**In one sentence:** An FDE is an engineer embedded with …
-
-## What it is
-…
-## Related
-- [Role Tests](../02-fde-vs-adjacent-roles/02-role-tests.md)
-- [Maturity Ladder](../../m4/05-production-readiness/04-maturity-ladder.md)   ← cross-module link, plain relative path
-```
-
-- **Cross-module links are relative file paths**, never artifact URLs. The build turns them into site URLs and **fails the build if the target page does not exist**, so the stale-link problem cannot come back.
-- Interview questions keep the existing `<details><summary>` HTML. It already works in Markdown, and the site styles it.
-- The 中文 file has the same path under `content/zh/`. If it is missing, the site shows the EN page with a "not yet translated" banner (this covers M2–M5 today).
-
-### 3.3 Website: Astro + Starlight on Vercel
-
-| Need | How it is met |
+| Question | Decision |
 |---|---|
-| EN / 中文 toggle | Starlight's built-in i18n (`/en/…`, `/zh/…`), with automatic fallback to EN |
-| Sidebar by module → lesson → page, with Row ID badges | Generated from each `module.yml` |
-| Search across all 293 pages | Pagefind, built in, runs at build time with no server and no cost |
-| Same look as the current handbook | IBM Plex fonts, the `#1D6A86` accent colour, the "In one sentence" callout and the `<details>` question cards, ported into Starlight's CSS |
-| Combined handbook | A `/handbook` route that renders every module in order on one page, for reading through and for printing to PDF |
-| "Last updated" on every page | Taken from Git history automatically |
-| Content schema validation | Astro content collections (zod): a bad frontmatter field fails the build with the file name and line |
+| Public or private | Private. A shared username and password for now; a proper sign-in method later |
+| Hosting | Vercel, free (Hobby) plan |
+| Dashboard | Pages CMS |
+| M4 and M5 | Use the new standalone M4 and M5 artifacts (the ones linked from the Module Overview), not the old combined M4–5 |
+| Review Log findings | Stay in the Google Sheet for now; no GitHub Issues |
+| Syllabus | Stays in Google Sheets |
+| Module owners | None for now; any reviewer can approve any change |
 
-Why this stack: the content is already Markdown, Starlight is built for documentation sites, the output is static (fast and cheap to host), and Vercel builds Astro with no configuration. Next.js with Nextra or Fumadocs would also work. Starlight was chosen because its built-in i18n fallback and search are exactly what this handbook needs, so less custom code is required.
-
-**Vercel setup:** import the GitHub repo, framework preset Astro, production branch `main`. Every pull request and every branch gets its own preview URL, and the Vercel bot comments that URL on the PR. Note: Vercel's free Hobby plan is for non-commercial personal use, so a company handbook should be on **Pro**. Check current pricing before committing.
-
-## 4. The two editing paths
-
-### 4.1 Developers: edit Markdown and push
+## 4. Architecture as built
 
 ```text
-git switch -c fix/m2-temperature-claim
-# edit content/en/m2/…/07-temperature.md (VS Code, Cursor, Claude Code, or "." on github.com for the web editor)
-npm run check            # same checks CI runs, takes seconds
-git commit -m "M2-L1.7: align temperature claim with M2-L1.5 (F0xx)"
-git push → open PR → Vercel preview link → module owner reviews → merge → live in ~1 min
+ Developers ──PR──────────────►┌──────────────── GitHub: AzurePartners/FDE_Handbook ────────────────┐
+                               │ src/content/docs/m0…m8/**.md        English pages (293)            │
+ Dashboard (Pages CMS) ─save──►│ src/content/docs/zh/m0…m8/**.md     中文 pages (139)                │
+   commits to `drafts`         │ src/data/modules.json               module + lesson labels, hours  │
+                               └───────┬───────────────────────────┬────────────────────────────────┘
+                                       │ every push                │ every push / PR
+                                       ▼                           ▼
+                        Vercel: Astro + Starlight build      GitHub Actions
+                          ├─ main → live site                  ├─ CI: unit tests, content checks, build
+                          ├─ any other branch → preview         └─ Drafts: keeps the "Publish dashboard
+                          └─ middleware.js: username/password       edits" PR open; syncs main → drafts
 ```
 
-"Edit in HTML and push" becomes "edit the Markdown and push". The text is identical to what is inside today's HTML, without the 150 KB of surrounding viewer code. If someone still produces a revised module as an artifact (for example by asking Claude to rewrite a module), `npm run import -- <artifact-url-or-file>` converts it back into Markdown files, and `git diff` shows exactly what changed before anything is merged.
+- **Markdown files are the only source.** One file per page per language, at `src/content/docs/<module>/<lesson>/<page>.md`, with `zh/` mirroring the same paths. The website is generated from these files, so nothing is maintained twice. The site *is* the combined handbook: one sidebar holds all nine modules.
+- **Links are file paths**, such as `../../m4/05-…/04-demo-mvp-pilot-production-maturity-ladder.md`. The build turns them into URLs, and `npm run check` fails on any link whose target file does not exist and on any `claude.ai/artifact` link. The stale-link problem in §2 cannot return.
+- **Site:** Astro 7 + Starlight 0.42.
+  - The sidebar is generated from `modules.json` (module → lesson → pages in file-name order).
+  - The header has an English/中文 switch. A missing translation shows the English page with a notice.
+  - Search is built in (Pagefind), and light and dark themes are supported.
+  - The header of every page shows the module, lesson and Row ID.
+  - The original artifacts' look is kept: IBM Plex, the teal accent, the "In one sentence" callout and the question cards.
+- **Privacy:** `middleware.js` runs on Vercel before every request (pages, search index, assets) and asks for HTTP Basic Auth credentials set in the `SITE_USERNAME` / `SITE_PASSWORD` environment variables. If they are not set, the site stays closed rather than going public. The search engine `noindex` tag is set as well. Replacing this one file is all a real sign-in method needs.
+- **Dashboard:** `.pages.yml` sets up Pages CMS.
+  - Its English and 中文 groups have one collection per module, browsed as a lesson tree.
+  - Each page has fields for the title, Row ID and Markdown body, and the body is edited as plain text, not rich text, so tables and question cards are never reformatted.
+  - Module and lesson labels are editable too.
+  - The config was validated against Pages CMS's own schema.
+- **Drafts flow:** dashboard edits are saved to `drafts`, Vercel previews that branch, and a workflow keeps one "Publish dashboard edits" pull request open into `main`. Merging it publishes the edits. Every push to `main` is merged back into `drafts`.
+- **Checks (`npm run check`, run in CI):**
+  - Errors: a missing title, a malformed Row ID, a broken page link, an artifact link, a 中文 page with no English page, or a lesson folder missing from `modules.json`.
+  - Warnings: a page missing a template section, or a 中文 page older than its English page.
 
-`CLAUDE.md` holds the authoring rules (template sections, tone, link conventions, Row ID rules). Claude Code sessions on this repo, including cloud sessions like this one, can then edit pages and open PRs directly, without regenerating whole artifacts.
+## 5. Status
 
-### 4.2 Non-developers: the dashboard
-
-**Recommendation: [Pages CMS](https://pagescms.org)**, a free hosted Git-based CMS.
-
-- Setup is one file (`.pages.yml`) in the repo. There is no server to run and no login system to build: editors sign in with their GitHub account at app.pagescms.org.
-- Editors see a list of modules and pages, open a page, edit the text in a Markdown editor (or the frontmatter fields as a form: title, Row ID), and click Save. Pages CMS turns each save into a normal Git commit under the editor's name.
-- It also handles image uploads into the repo.
-
-**Keeping dashboard edits safe:** dashboard users edit a `drafts` branch, not `main`.
-
-```text
-Dashboard save ─► commit on `drafts` ─► Vercel preview of drafts (stable URL, e.g. drafts.handbook…)
-                                     └► GitHub Action keeps one "Publish drafts" PR open (drafts → main)
-                                            CI checks + owner review ─► merge ─► production
-```
-
-Non-developers never touch Git, nothing reaches the live site without passing the checks and a review, and every dashboard edit still has history and can be reverted.
-
-Alternatives considered (Phase 0 spike confirms the choice against real M0 content):
-
-| Option | Pros | Cons |
-|---|---|---|
-| **Pages CMS** (recommended) | No infra, free, plain-text Markdown editing, works with any folder layout | Commits to a branch rather than opening a PR per edit (solved by the `drafts` flow above) |
-| Decap CMS | Self-hosted `/admin` page, "editorial workflow" opens a PR per edit, side-by-side EN/中文 editing | Needs a small OAuth function on Vercel; nested folders combined with i18n is fiddly |
-| TinaCMS | Visual, edit-on-the-page experience | Depends on Tina Cloud (paid above the free tier) and a content schema to maintain |
-| Keystatic | Good Astro integration, branch/PR support | Requires server output on Vercel and a GitHub App to set up |
-
-## 5. Governance in GitHub
-
-| Today (Sheets) | In GitHub |
+| Phase | Status |
 |---|---|
-| Findings tab (F001–F247), Status / Owner / Notes | **GitHub Issues**, one per finding, labels `module:M2`, `severity:high`, `rubric:accuracy`; imported once by script, keeping the F-numbers in titles |
-| Decisions Needed tab | Issues labelled `decision`; the PR that applies a decision links to it |
-| Module Verdicts, fix tracking | **GitHub Project** board: Open → In progress → In review → Fixed, grouped by module |
-| Changelog tab | `CHANGELOG.md` seeded from the tab; afterwards release notes are generated from merged PR titles and labels on each tagged release (`v2026.10.0`, …) |
-| "Who checked this" | Branch protection on `main`: 1 approving review and green CI required; `CODEOWNERS` routes each module to its owner |
-| Module Overview "Handbook Link" column | Updated to the site URLs (stable forever, unlike artifact links) |
+| 1. Import | Done. 293 English and 139 中文 pages. All 2,380 internal links resolved to file paths, including the 228 that pointed at superseded artifacts. M4/M5 came from the new standalone artifacts (HTML converted to Markdown), M6 from its 2 Oct artifact, and the rest from the combined file (identical to the module artifacts apart from link format) |
+| 2. Site | Done. Builds 589 pages; every internal link in the built site resolves |
+| 3. Checks | Done. CI workflow, content checks, unit tests for the login |
+| 4. Dashboard | Done in the repo; the Pages CMS app needs installing (README, One-time setup) |
+| Login | Done in the repo; set `SITE_USERNAME` / `SITE_PASSWORD` in Vercel |
 
-A PR that fixes a finding says `Fixes #123`, and the issue closes automatically when it merges.
+Re-running the import (`npm run import -- --combined … --module M4=…`) regenerates the module folders from artifacts, so do not run it once people are editing in the repo.
 
-## 6. Automated checks (CI on every PR)
+## 6. Next steps
 
-These turn the Review Log's scripted method into permanent checks:
-
-| Check | Fails / warns | Source |
-|---|---|---|
-| Frontmatter schema (title, row format `M\d-L\d+\.\d+`) | Fail | Astro content collections |
-| Internal and cross-module links resolve | Fail | `starlight-links-validator` |
-| Every syllabus Row ID has a page; every page's Row ID exists in the syllabus | Fail (warn for modules marked "in rebuild") | `check-content.ts` + `syllabus/master-syllabus.csv` |
-| Row IDs unique across pages (except declared multi-row pages) | Fail | `check-content.ts` |
-| Template sections present, in order, in EN and 中文 | Warn | `check-content.ts` |
-| Page title matches the start of syllabus column C (F004) | Warn | `check-content.ts` |
-| 中文 page older than its EN page (EN edited after the translation) | Warn, listed in a PR comment | Git dates |
-| No raw `claude.ai/artifact/` links in content | Fail | `check-content.ts` |
-| External links alive | Weekly scheduled run; opens/updates one "Broken links" issue (replaces the Resource Link Check tab) | `lychee` |
-| Markdown lint (heading levels, table formatting) | Warn | `markdownlint` |
-
-## 7. Syllabus: keep it in Sheets for now, mirror it in Git
-
-The Master Curriculum sheet is a planning tool the team already uses well, so it should not be forced into Git on day one.
-
-- **Phase 5:** a GitHub Action (manual button + nightly) reads Module Overview, Master Syllabus and Background Pathways through the Sheets API (service account, read-only) and writes `syllabus/*.csv`. If anything changed it opens a PR, so syllabus edits also get a diff, a review and the cross-checks in §6.
-- **Later, optional:** flip the direction (CSV in Git is the source; the sheet is regenerated for reading) once most edits happen in the repo.
-
-## 8. Rollout plan
-
-| Phase | What | Output | Size |
-|---|---|---|---|
-| **0. Decide + spike** | Answer §9; try Pages CMS on 3 M0 pages; agree the folder layout | Decisions recorded as issues | ½–1 day |
-| **1. Import** | Write `import-artifact.ts` for all 4 formats (HTML→Markdown for M4/M5 via `turndown`); import all 293 pages; rewrite every artifact URL to a relative path using an artifact-id → module map (the 3 superseded ids above map to M4/M5, M6, M8; anchors map via Row IDs); report anything that cannot be mapped | `content/` populated, import report listing unmappable links | 1–2 days |
-| **2. Site** | Astro + Starlight scaffold, theme port, `module.yml` sidebars, `/handbook` combined view, connect Vercel, custom domain | Live preview site; production on `main` | 1–2 days |
-| **3. Checks** | `check-content.ts`, link validator, lychee schedule, PR template, branch protection, CODEOWNERS | Red/green CI on every PR | 1–2 days |
-| **4. Dashboard** | `.pages.yml`, `drafts` branch + auto "Publish drafts" PR, `CONTRIBUTING.md` with screenshots for non-developers | Non-developers can edit | ½–1 day |
-| **5. Sheets + history** | Syllabus sync Action; import Findings / Decisions as Issues + Project board; seed `CHANGELOG.md`; update Module Overview links | Review work moves to GitHub | 1 day |
-| **6. Optional extras** | Single-file HTML export (keeps publishing to claude.ai possible), PDF of the combined handbook, a PR bot that drafts 中文 updates for changed EN pages, privacy-friendly analytics | As chosen | per item |
-
-Sizes are working days of build effort, excluding review time. Phases 1–3 are the critical path. From the end of Phase 2 the team can stop editing artifacts, because every change goes through the repo.
-
-**Cut-over rule:** once Phase 2 is live, the artifacts are frozen (each one gets a banner pointing to the site), and no one edits them again. This avoids two sources of truth.
-
-## 9. Decisions needed before Phase 1
-
-1. **Public or private site?** Public means Vercel Pro is enough. Private means Vercel's paid deployment protection, or Cloudflare Pages + Cloudflare Access (free for small teams). The current artifacts are public links.
-2. **Dashboard:** Pages CMS (recommended) or one of the alternatives in §4.2.
-3. **M4 and M5** are marked "being rebuilt" and are stored as HTML rather than Markdown. Import the current version now (converted to Markdown, then rebuild inside the repo), or wait for the rebuilt version?
-4. **Review Log:** move Findings and Decisions to GitHub Issues (recommended), or keep them in the sheet?
-5. **Syllabus:** keep editing in Sheets with a nightly sync (recommended), or move it into the repo now?
-6. **Combined handbook:** please share the current combined version so the `/handbook` view and any export can match its structure (front matter, ordering, anything it has beyond the modules).
-7. **Domain** for the site, and **who owns each module** (for `CODEOWNERS` and review routing).
+1. **Connect Vercel** and set the two login variables (README, One-time setup). If Vercel's Hobby plan will not import an organization-owned repository, turn on the GitHub Actions deploy in `.github/workflows/vercel-deploy.yml`.
+2. **Install Pages CMS** on the repository and invite the editors.
+3. **Protect `main`**: require a pull request and the CI check.
+4. **Freeze the artifacts**: add a note to each published artifact pointing to the site, and change the Module Overview "Handbook Link" column to the site URLs.
+5. Later, as needed:
+   - a real sign-in method in place of the shared password;
+   - a weekly external-link check (replaces the Resource Link Check tab);
+   - a nightly copy of the Master Syllabus from Sheets, so the check can also confirm every syllabus row has a page;
+   - a print/PDF view of the whole handbook;
+   - moving the Review Log into GitHub Issues.

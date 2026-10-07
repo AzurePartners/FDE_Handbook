@@ -1,0 +1,28 @@
+{
+  "name": "fde-handbook",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "node scripts/check-content.mjs",
+    "import": "node scripts/import-artifacts.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "^7.3.2",
+    "@astrojs/starlight": "^0.42.5",
+    "@vercel/functions": "^3.9.11",
+    "astro": "^7.3.6",
+    "sharp": "^0.35.5"
+  },
+  "devDependencies": {
+    "turndown": "^7.2.4",
+    "turndown-plugin-gfm": "^1.0.2",
+    "yaml": "^2.9.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

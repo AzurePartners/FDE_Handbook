@@ -1,0 +1,34 @@
+---
+// Module cards for the home page, from src/data/modules.json (labels, hours, purpose).
+import { getCollection } from 'astro:content';
+import { modules } from '../data/modules.json';
+
+interface Props {
+  lang?: 'en' | 'zh';
+}
+const { lang = 'en' } = Astro.props;
+const prefix = lang === 'zh' ? '/zh' : '';
+const hours = lang === 'zh' ? '小时' : 'h';
+// First page of each module, in sidebar order (EN ids; the zh route exists for every page).
+const ids = (await getCollection('docs')).map((e) => e.id).filter((id) => /^m\d\//.test(id)).sort();
+const firstPage = (dir: string) => ids.find((id) => id.startsWith(`${dir}/`));
+---
+
+<ul class="module-list">
+  {
+    modules.map((m) => {
+      return (
+        <li>
+          <a href={`${prefix}/${firstPage(m.dir)}/`}>
+            {m.code} · {(lang === 'zh' && m.name_zh) || m.name}
+          </a>
+          <div class="meta">
+            {m.lessons.length} {lang === 'zh' ? '个章节' : 'sections'}
+            {m.minHours !== undefined && ` · ${m.minHours}–${m.maxHours} ${hours}`}
+          </div>
+          {m.purpose && <p>{m.purpose}</p>}
+        </li>
+      );
+    })
+  }
+</ul>

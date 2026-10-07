@@ -1,0 +1,218 @@
+# Pages CMS (https://app.pagescms.org) configuration: the editing dashboard for this repo.
+# Sign in with GitHub, open this repository, and pick the `drafts` branch in the branch menu.
+# Every save is a commit on that branch; see CONTRIBUTING.md for how drafts are published.
+
+media:
+  input: public/images
+  output: /images
+
+content:
+  - name: english
+    label: English
+    type: group
+    items:
+      - name: en-m0
+        label: "M0 · Start Here: Understanding the FDE Role"
+        type: collection
+        path: src/content/docs/m0
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: &page-fields
+          - name: title
+            label: Title
+            type: string
+            required: true
+          - name: row
+            label: Syllabus Row ID
+            description: The Master Syllabus row this page covers, e.g. M4-L1.2. Leave empty for introductions.
+            type: string
+            pattern:
+              regex: "^(M\\d-L\\d+\\.\\d+)?$"
+              message: "Row IDs look like M4-L1.2"
+          - name: rows
+            label: All syllabus rows (only for pages covering several rows)
+            type: string
+            list: true
+          - name: body
+            label: Page content (Markdown)
+            description: "Write Markdown. Link to another page by its file path, e.g. ../02-lesson/03-page.md"
+            type: code
+            options:
+              format: markdown
+      - name: en-m1
+        label: "M1 · AI-Assisted Development & Software Systems Foundations"
+        type: collection
+        path: src/content/docs/m1
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: en-m2
+        label: "M2 · AI Application Engineering"
+        type: collection
+        path: src/content/docs/m2
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: en-m3
+        label: "M3 · Agent Engineering"
+        type: collection
+        path: src/content/docs/m3
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: en-m4
+        label: "M4 · Enterprise Integration & Production AI"
+        type: collection
+        path: src/content/docs/m4
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: en-m5
+        label: "M5 · FDE Discovery, Consulting & Delivery"
+        type: collection
+        path: src/content/docs/m5
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: en-m6
+        label: "M6 · Four Representative FDE Use-Case Archetypes"
+        type: collection
+        path: src/content/docs/m6
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: en-m7
+        label: "M7 · FDE End-to-End Practicum"
+        type: collection
+        path: src/content/docs/m7
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: en-m8
+        label: "M8 · Career Preparation & FDE Interviews"
+        type: collection
+        path: src/content/docs/m8
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+  - name: chinese
+    label: 中文
+    type: group
+    items:
+      - name: zh-m0
+        label: "M0 · 从这里开始：理解 FDE 角色"
+        type: collection
+        path: src/content/docs/zh/m0
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: zh-m1
+        label: "M1 · AI 辅助开发与软件系统基础"
+        type: collection
+        path: src/content/docs/zh/m1
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: zh-m6
+        label: "M6 · 四个代表性 FDE 用例原型"
+        type: collection
+        path: src/content/docs/zh/m6
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: zh-m7
+        label: "M7 · FDE 端到端实战"
+        type: collection
+        path: src/content/docs/zh/m7
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: zh-m8
+        label: "M8 · 就业准备与 FDE 面试"
+        type: collection
+        path: src/content/docs/zh/m8
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+  - name: modules
+    label: Modules & lessons (sidebar labels, hours)
+    type: file
+    path: src/data/modules.json
+    format: json
+    fields:
+      - name: modules
+        label: Modules
+        type: object
+        list: true
+        fields:
+          - { name: code, label: Code, type: string, required: true }
+          - { name: dir, label: Folder, type: string, required: true }
+          - { name: name, label: Name, type: string, required: true }
+          - { name: name_zh, label: Name (中文), type: string }
+          - { name: minHours, label: Minimum hours, type: number }
+          - { name: maxHours, label: Maximum hours, type: number }
+          - { name: purpose, label: Purpose, type: text }
+          - name: lessons
+            label: Lessons (one per folder, in order)
+            type: object
+            list: true
+            fields:
+              - { name: dir, label: Folder, type: string, required: true }
+              - { name: label, label: Label, type: string, required: true }
+              - { name: label_zh, label: Label (中文), type: string }

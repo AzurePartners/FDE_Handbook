@@ -1,0 +1,23 @@
+---
+// Starlight's page title, with the module / lesson breadcrumb and the syllabus Row ID(s) above it.
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+import { modules } from '../data/modules.json';
+
+const { entry, locale } = Astro.locals.starlightRoute;
+const zh = locale === 'zh';
+const [modDir, lessonDir] = entry.id.replace(/^zh\//, '').split('/');
+const mod = modules.find((m) => m.dir === modDir);
+const lesson = mod?.lessons.find((l) => l.dir === lessonDir);
+const rows = entry.data.rows ?? (entry.data.row ? [entry.data.row] : []);
+---
+
+{
+  mod && (
+    <div class="page-crumb">
+      <span>{mod.code}</span>
+      {lesson && <span>{(zh && lesson.label_zh) || lesson.label}</span>}
+      {rows.map((r) => <code class="row-id">{r}</code>)}
+    </div>
+  )
+}
+<Default />

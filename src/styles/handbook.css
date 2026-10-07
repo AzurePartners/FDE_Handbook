@@ -1,0 +1,102 @@
+/* Handbook look: IBM Plex, the teal accent of the original artifacts, and the
+   "In one sentence" callout and interview-question cards. */
+
+:root {
+  --sl-font: 'IBM Plex Sans', -apple-system, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --sl-font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+  --sl-content-width: 48rem;
+}
+
+/* Dark mode is Starlight's default theme */
+:root {
+  --sl-color-accent-low: #16303b;
+  --sl-color-accent: #3c8fb0;
+  --sl-color-accent-high: #a9d8ea;
+}
+:root[data-theme='light'] {
+  --sl-color-accent-low: #e3f0f5;
+  --sl-color-accent: #1d6a86;
+  --sl-color-accent-high: #124a5e;
+}
+
+/* "In one sentence:" — the first paragraph of every page */
+.sl-markdown-content > p:first-child {
+  background: var(--sl-color-accent-low);
+  border-radius: 0.5rem;
+  padding: 0.85rem 1.1rem;
+  font-size: var(--sl-text-lg);
+}
+
+/* Interview questions */
+.sl-markdown-content details {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  padding: 0;
+  background: var(--sl-color-bg-nav);
+}
+.sl-markdown-content details > summary {
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+}
+.sl-markdown-content details[open] > summary {
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+.sl-markdown-content details > :not(summary) {
+  margin-inline: 1rem;
+}
+.sl-markdown-content details > :last-child {
+  margin-bottom: 0.9rem;
+}
+
+/* Breadcrumb and Row IDs above the page title */
+.page-crumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.9rem;
+  font-size: var(--sl-text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--sl-color-gray-3);
+  margin-top: 1rem;
+}
+.page-crumb .row-id {
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--sl-color-accent-high);
+  background: var(--sl-color-accent-low);
+  padding: 0.1rem 0.45rem;
+  border-radius: 0.25rem;
+}
+.page-crumb + h1 {
+  margin-top: 0.35rem;
+}
+
+/* Module cards on the home page */
+.module-list {
+  display: grid;
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+.module-list li {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  padding: 1rem 1.2rem;
+  margin: 0;
+}
+.module-list a {
+  font-weight: 600;
+  font-size: var(--sl-text-lg);
+  text-decoration: none;
+}
+.module-list .meta {
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+  margin-top: 0.25rem;
+}
+.module-list p {
+  margin-top: 0.5rem;
+}

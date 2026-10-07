@@ -1,0 +1,69 @@
+# Dashboard (Pages CMS) edits are saved to the `drafts` branch. This workflow
+#  - keeps one "Publish dashboard edits" pull request open from drafts into main, and
+#  - merges main back into drafts after every change to main, so drafts never falls behind.
+name: Drafts
+
+on:
+  push:
+    branches: [main, drafts]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency: drafts
+
+jobs:
+  open-publish-pr:
+    if: github.ref == 'refs/heads/drafts'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const open = await github.rest.pulls.list({ owner, repo, head: `${owner}:drafts`, base: 'main', state: 'open' });
+            if (open.data.length) {
+              core.info(`Publish PR already open: ${open.data[0].html_url}`);
+              return;
+            }
+            const { data: cmp } = await github.rest.repos.compareCommits({ owner, repo, base: 'main', head: 'drafts' });
+            if (!cmp.files?.length) {
+              core.info('drafts has no changes compared with main.');
+              return;
+            }
+            const { data: pr } = await github.rest.pulls.create({
+              owner, repo, head: 'drafts', base: 'main',
+              title: 'Publish dashboard edits',
+              body: [
+                'Edits saved in the dashboard (Pages CMS) since the last publish.',
+                '',
+                '- Review the changes in **Files changed** and on the Vercel preview of the `drafts` branch.',
+                '- When CI is green, merge with **Create a merge commit** to publish them to the live site.',
+                '',
+                'This pull request is opened automatically and updates itself as more edits are saved.',
+              ].join('\n'),
+            });
+            core.info(`Opened ${pr.html_url}`);
+
+  sync-drafts-with-main:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Merge main into drafts
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git ls-remote --exit-code --heads origin drafts >/dev/null; then
+            git push origin HEAD:refs/heads/drafts
+            exit 0
+          fi
+          git checkout -B drafts origin/drafts
+          if ! git merge --no-edit origin/main; then
+            echo "::error::drafts and main changed the same lines. Merge main into drafts by hand and resolve the conflict."
+            exit 1
+          fi
+          git push origin drafts
