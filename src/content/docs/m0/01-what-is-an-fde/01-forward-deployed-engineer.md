@@ -1,5 +1,5 @@
 ---
-title: Forward Deployed Engineer
+title: FDE
 row: M0-L1.1
 ---
 **In one sentence:** A Forward Deployed Engineer (FDE) is an engineer embedded with a specific customer who is accountable for a system running, being used and producing a measurable result inside that customer's real systems, permissions and workflows.
