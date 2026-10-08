@@ -1,0 +1,35 @@
+# Keeps the Google Sheet's "Module Overview" and "Master Syllabus" tabs as a read-only copy of
+# the syllabus generated from the handbook. Runs after every change to main, or by hand from the
+# Actions tab. Setup (service account key + sharing the sheet): README, "Google Sheet mirror".
+name: Syllabus sheet
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/content/docs/**'
+      - 'src/data/**'
+      - 'src/lib/**'
+      - 'scripts/sync-syllabus-sheet.mjs'
+  workflow_dispatch:
+
+concurrency:
+  group: syllabus-sheet
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Write the syllabus to the Google Sheet
+        run: node scripts/sync-syllabus-sheet.mjs
+        env:
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          SYLLABUS_SHEET_ID: ${{ vars.SYLLABUS_SHEET_ID || '1Xh0Te73MuFuJl7i_q0jbq_a4og3FjU-WvJGTetaUCkI' }}
+          SITE_URL: ${{ vars.SITE_URL }}

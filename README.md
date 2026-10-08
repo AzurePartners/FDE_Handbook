@@ -5,6 +5,7 @@ The Azure Partners Forward Deployed Engineer handbook (Modules 0–8, English an
 - **Content:** one Markdown file per page in [`src/content/docs/`](src/content/docs). The website is generated from these files, so they are the only thing anyone edits.
 - **Site:** [Astro](https://astro.build) + [Starlight](https://starlight.astro.build), deployed on Vercel. Every push builds a preview; `main` is the live site.
 - **Dashboard:** [Pages CMS](https://app.pagescms.org) for editing pages in the browser, configured in [`.pages.yml`](.pages.yml).
+- **Syllabus:** generated from the pages on every publish: the site's **Syllabus** page, a CSV download, and a read-only copy in the Google Sheet.
 - **Checks:** every pull request runs the content checks (`npm run check`), the unit tests and a full build.
 
 How to edit: see [CONTRIBUTING.md](CONTRIBUTING.md). Why it is built this way and what comes next: see [docs/PLAN.md](docs/PLAN.md).
@@ -18,11 +19,15 @@ src/content/docs/
 └─ zh/
    ├─ index.mdx                    home page (中文)
    └─ m0/ m1/ m6/ m7/ m8/          中文 pages, same paths; a missing page falls back to English
-src/data/modules.json              module names, lesson labels (sidebar), hours, purpose
+src/data/modules.json              modules and lessons: names, goals, learning outcomes, study time
+src/data/syllabus.json             syllabus intro text and the practice rows that have no page
+src/lib/syllabus.mjs               builds the syllabus from the pages + the two files above
+src/pages/syllabus.astro, syllabus.csv.ts   the Syllabus page and its CSV download
 src/components/, src/styles/       page header and handbook look
 src/plugins/remark-md-links.mjs    turns ../lesson/page.md links into site URLs
 src/auth/basic-auth.js, middleware.js   username/password protection on Vercel
 scripts/check-content.mjs          content checks (CI)
+scripts/sync-syllabus-sheet.mjs    writes the syllabus into the Google Sheet (read-only copy)
 scripts/import-artifacts.mjs       one-off import from the published artifacts
 ```
 
@@ -43,7 +48,7 @@ Node 22 or newer.
 ### 1. Vercel
 
 1. In Vercel, **Add New → Project** and import `AzurePartners/FDE_Handbook`. The Astro preset is detected automatically (build `npm run build`, output `dist`).
-2. Under **Settings → Environment Variables**, add `SITE_USERNAME` and `SITE_PASSWORD` for both Production and Preview. Until both are set, the site answers every request with "Site login is not configured" instead of going public.
+2. Under **Settings → Environment Variables**, add `SITE_USERNAME` and `SITE_PASSWORD` for both Production and Preview (and, once you know it, `SITE_URL` with the live address, used for links in the syllabus download). Until both are set, the site answers every request with "Site login is not configured" instead of going public.
 3. Deploy. Opening the site now asks for the username and password.
 
 If Vercel's Hobby plan will not import the repository because it belongs to a GitHub organization, deploy from GitHub Actions instead. Create the Vercel project from the CLI (`vercel link`), then add the `VERCEL_TOKEN` secret and the `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` and `DEPLOY_WITH_CLI=true` variables to the repository; [`vercel-deploy.yml`](.github/workflows/vercel-deploy.yml) then deploys every push.
@@ -58,4 +63,17 @@ To change the password, edit `SITE_PASSWORD` in Vercel and redeploy. The login l
 
 ### 3. GitHub
 
-Under **Settings → Branches**, protect `main`: require a pull request and the **CI / check** status check. Dashboard edits are unaffected, because they go to `drafts` and reach `main` through the "Publish dashboard edits" pull request.
+1. Let the drafts workflow open the "Publish dashboard edits" pull request: turn on **Allow GitHub Actions to create and approve pull requests** under **Settings → Actions → General → Workflow permissions**. For a repository owned by an organization, turn it on in the organization's settings first, or the repository option stays greyed out. Until then each save still works, and the Drafts run shows a warning with a link to open the pull request yourself.
+2. Under **Settings → Branches**, protect `main`: require a pull request and the **CI / check** status check. Dashboard edits are unaffected, because they go to `drafts` and reach `main` through the publish pull request.
+
+### 4. Google Sheet mirror (syllabus)
+
+After every change to `main`, the **Syllabus sheet** workflow rewrites the **Module Overview** and **Master Syllabus** tabs of the AP_FDE_Master_Curriculum sheet from the handbook. Other tabs are not touched. The first run keeps a copy of each tab ("… (before GitHub <date>)") and protects the two tabs, so anyone who edits them gets a warning. One-time setup:
+
+1. In [Google Cloud console](https://console.cloud.google.com), pick or create a project and enable the **Google Sheets API** (APIs & Services → Library).
+2. **IAM & Admin → Service accounts → Create service account** (no roles needed). Open it, **Keys → Add key → Create new key → JSON**. A `.json` file downloads. If key creation is blocked, your Google Workspace admin has to allow service account keys for this project.
+3. Open the sheet, **Share**, and add the service account's email (`…@….iam.gserviceaccount.com`) as **Editor**.
+4. In GitHub, **Settings → Secrets and variables → Actions**: add the secret `GOOGLE_SERVICE_ACCOUNT_KEY` with the whole contents of the `.json` file. Optionally add the variable `SITE_URL` (live site address, for the Handbook Link column). Add `SYLLABUS_SHEET_ID` only to mirror a different sheet.
+5. **Actions → Syllabus sheet → Run workflow** once, then check the sheet.
+
+Until the secret exists the workflow skips with a notice. `npm run sync-sheet -- --dry-run` shows locally what would be written.

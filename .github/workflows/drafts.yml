@@ -18,7 +18,7 @@ jobs:
     if: github.ref == 'refs/heads/drafts'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v7
+      - uses: actions/github-script@v8
         with:
           script: |
             const { owner, repo } = context.repo;
@@ -32,25 +32,43 @@ jobs:
               core.info('drafts has no changes compared with main.');
               return;
             }
-            const { data: pr } = await github.rest.pulls.create({
-              owner, repo, head: 'drafts', base: 'main',
-              title: 'Publish dashboard edits',
-              body: [
-                'Edits saved in the dashboard (Pages CMS) since the last publish.',
-                '',
-                '- Review the changes in **Files changed** and on the Vercel preview of the `drafts` branch.',
-                '- When CI is green, merge with **Create a merge commit** to publish them to the live site.',
-                '',
-                'This pull request is opened automatically and updates itself as more edits are saved.',
-              ].join('\n'),
-            });
-            core.info(`Opened ${pr.html_url}`);
+            const title = 'Publish dashboard edits';
+            const body = [
+              'Edits saved in the dashboard (Pages CMS) since the last publish.',
+              '',
+              '- Review the changes in **Files changed** and on the Vercel preview of the `drafts` branch.',
+              '- When CI is green, merge with **Create a merge commit** to publish them to the live site.',
+              '',
+              'This pull request updates itself as more edits are saved.',
+            ].join('\n');
+            try {
+              const { data: pr } = await github.rest.pulls.create({ owner, repo, head: 'drafts', base: 'main', title, body });
+              core.info(`Opened ${pr.html_url}`);
+            } catch (e) {
+              if (e.status !== 403) throw e;
+              // The repository (or organization) does not let workflows open pull requests. Saving
+              // still worked; point the editor at a one-click link instead of failing the run.
+              const url = `${context.serverUrl}/${owner}/${repo}/compare/main...drafts?expand=1&title=${encodeURIComponent(title)}`;
+              core.warning(
+                `Your edit is saved on the drafts branch, but GitHub did not let this workflow open the publish pull request. ` +
+                `Open it yourself: ${url} . To let it open automatically, turn on "Allow GitHub Actions to create and approve pull requests" ` +
+                `under Settings → Actions → General → Workflow permissions (in the organization's settings first, then the repository's).`,
+              );
+              await core.summary
+                .addHeading('Edit saved: open the publish pull request')
+                .addRaw('GitHub did not let this workflow open the pull request, so ')
+                .addLink('open it here', url)
+                .addRaw('.')
+                .addBreak()
+                .addRaw('To have it opened automatically after every save, turn on <b>Allow GitHub Actions to create and approve pull requests</b> under <b>Settings → Actions → General → Workflow permissions</b>, in the organization settings and then the repository settings.')
+                .write();
+            }
 
   sync-drafts-with-main:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
       - name: Merge main into drafts

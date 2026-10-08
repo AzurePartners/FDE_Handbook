@@ -9,7 +9,7 @@ There are two ways to change the handbook. Both edit the same Markdown files, an
 3. Choose **English** or **中文**, then the module, and open a page. Lesson folders are shown as a tree.
 4. Edit the **Title**, **Syllabus Row ID** or **Page content**, then **Save**. Each save is one change in the history, under your name.
 5. Check the result on the **drafts preview** (the Vercel URL for the `drafts` branch, for example `…-git-drafts-….vercel.app`).
-6. When the edits are ready, open the **Publish dashboard edits** pull request on GitHub. It is opened automatically after your first save and updates itself afterwards. When CI is green, merge it with **Create a merge commit**. The live site updates about a minute later.
+6. When the edits are ready, open the **Publish dashboard edits** pull request on GitHub. It is opened automatically after your first save and updates itself afterwards. (If it does not appear, open the latest **Drafts** run under **Actions**: its summary has a link that opens it in one click.) When CI is green, merge it with **Create a merge commit**. The live site updates about a minute later.
 
 Things the dashboard does not handle well, which are easier in Git (section B):
 
@@ -72,4 +72,17 @@ A translation lives at the same path under `src/content/docs/zh/`. If it is miss
 
 ## Syllabus
 
-The Master Syllabus stays in the Google Sheet. When a page's Row ID or title changes, update the sheet's row to match.
+The syllabus is generated from the handbook, so there is nothing to keep in sync by hand. See it on the site under **Syllabus** (top of the sidebar), download it as CSV from there, or read the Google Sheet copy. The sheet's Module Overview and Master Syllabus tabs are rewritten after every publish, so don't edit them.
+
+| To change… | Edit… |
+|---|---|
+| A row's topic title | the page's **Title** |
+| A row's description | the page's **In one sentence** line |
+| A row's resources | the page's **Learn more** list |
+| Which row a page covers | the page's **Syllabus Row ID** |
+| A lesson's title, learning outcomes or study time | **Modules & lessons** in the dashboard (`src/data/modules.json`) |
+| A module's name, goal, purpose or notes | **Modules & lessons** |
+| A module's total study time | the study time of its lessons (it is their sum) |
+| Practice rows without a page, the syllabus intro | **Syllabus** in the dashboard (`src/data/syllabus.json`) |
+
+A page's Row ID must belong to the lesson of the folder it sits in (a page in Lesson 3's folder has an `M…-L3.…` Row ID); the check reports any mismatch.

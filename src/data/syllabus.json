@@ -1,0 +1,49 @@
+{
+  "title": "FDE Master Curriculum | Modular Syllabus from Beginner to Job-Ready",
+  "intro": [
+    "Design approach: organize the complete knowledge map into modules and lessons without binding it to a fixed number of weeks. Each lesson includes detailed topics, learning outcomes, and estimated total study time. Modules can later be combined flexibly based on a learner’s background, goals, and weekly availability.",
+    "Curriculum principles: Less syntax, more systems. Start with the business problem. Add technical complexity only when the problem truly requires it. Puffo/Pavlov can serve as a rapid delivery abstraction layer, while the curriculum also explains the code, tools, state, data, permissions, and production engineering behind it."
+  ],
+  "overviewTitle": "FDE Master Curriculum | Module Overview & Estimated Hours",
+  "fullPath": {
+    "purpose": "A complete knowledge and project pathway from near-beginner level to an entry-level / apprentice FDE job-search portfolio.",
+    "notes": "Not every learner needs the full path; the actual curriculum should be tailored to background and goals."
+  },
+  "extraRows": [
+    {
+      "row": "M2-L3.10",
+      "topics": "Practice (no handbook page): turn course materials, FAQs, policies or product documentation into a Tutor / Customer Support Assistant that cites its sources and says so when the evidence is missing.",
+      "resources": "• Applies rows M2-L3.1 to M2-L3.9\n• Guide: Retrieval-augmented generation (Claude Cookbook) — https://platform.claude.com/cookbook/capabilities-retrieval-augmented-generation-guide"
+    },
+    {
+      "row": "M2-L6.10",
+      "topics": "Practice (no handbook page): add escalation on checkable signals (not the model's self-rated confidence), sensitive-request blocking and human takeover to the Tutor / Support Assistant.",
+      "resources": "• Applies rows M2-L6.2, M2-L6.6 and M2-L6.8\n• Guide: Customer support agent (Anthropic docs) — https://platform.claude.com/docs/en/about-claude/use-case-guides/customer-support-chat"
+    },
+    {
+      "row": "M3-L1.7",
+      "topics": "Practice (no handbook page): write minimal profiles for Content Research, Draft and Review agents and compare their responsibilities.",
+      "resources": "• Applies rows M3-L1.2 and M3-L1.4\n• Article: How we built our multi-agent research system (Anthropic) — https://www.anthropic.com/engineering/multi-agent-research-system"
+    },
+    {
+      "row": "M3-L2.7",
+      "topics": "Practice (no handbook page): decompose a content-creation flow into research, outline, draft, review and revise skills.",
+      "resources": "• Applies rows M3-L2.3 and M3-L2.6\n• Reference: Skill authoring best practices (Anthropic docs) — https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices"
+    },
+    {
+      "row": "M3-L3.9",
+      "topics": "Practice (no handbook page): map a Content Operations flow (Research, Plan, Draft, Review) and mark each step as deterministic code, LLM or human, with a reason for each.",
+      "resources": "• Applies rows M3-L3.1 and M3-L3.5\n• Article: Building effective agents (Anthropic) — https://www.anthropic.com/engineering/building-effective-agents"
+    },
+    {
+      "row": "M3-L4.9",
+      "topics": "Practice (no handbook page): let a Content or Finance agent remember prior analysis, user preferences and confirmed constraints, each stored with its source and date.",
+      "resources": "• Applies rows M3-L4.5 and M3-L4.6\n• Reference: Memory overview (LangChain docs) — https://docs.langchain.com/oss/python/concepts/memory"
+    },
+    {
+      "row": "M3-L5.9",
+      "topics": "Practice (no handbook page): build a recoverable persistent agent on Puffo/Pavlov or an equivalent runtime, kill a worker mid-task, and confirm it resumes with no duplicate side effects.",
+      "resources": "• Applies rows M3-L5.2, M3-L5.5 and M3-L5.8\n• Reference: Checkpointers (LangGraph docs) — https://docs.langchain.com/oss/python/langgraph/checkpointers\n• Reference: Testing suite (Temporal docs) — https://docs.temporal.io/develop/python/best-practices/testing-suite"
+    }
+  ]
+}

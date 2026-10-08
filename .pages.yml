@@ -12,7 +12,7 @@ content:
     type: group
     items:
       - name: en-m0
-        label: "M0 · Start Here: Understanding the FDE Role"
+        label: "M0 · Start Here — Understanding the FDE Role"
         type: collection
         path: src/content/docs/m0
         subfolders: true
@@ -66,7 +66,7 @@ content:
           fields: [title, row]
         fields: *page-fields
       - name: en-m3
-        label: "M3 · Agent Engineering"
+        label: "M3 · Agent Engineering — From Prompts to Scalable Agent Systems"
         type: collection
         path: src/content/docs/m3
         subfolders: true
@@ -191,7 +191,8 @@ content:
           fields: [title, row]
         fields: *page-fields
   - name: modules
-    label: Modules & lessons (sidebar labels, hours)
+    label: Modules & lessons (names, outcomes, study time)
+    description: These names appear in the sidebar and in the syllabus. A module's study time is the sum of its lessons'.
     type: file
     path: src/data/modules.json
     format: json
@@ -205,14 +206,42 @@ content:
           - { name: dir, label: Folder, type: string, required: true }
           - { name: name, label: Name, type: string, required: true }
           - { name: name_zh, label: Name (中文), type: string }
-          - { name: minHours, label: Minimum hours, type: number }
-          - { name: maxHours, label: Maximum hours, type: number }
-          - { name: purpose, label: Purpose, type: text }
+          - { name: purpose, label: Purpose (home page and Module Overview), type: text }
+          - { name: goal, label: Goal (syllabus), type: text }
+          - { name: notes, label: Notes (Module Overview), type: string }
           - name: lessons
-            label: Lessons (one per folder, in order)
+            label: Lesson folders (in order)
             type: object
             list: true
             fields:
               - { name: dir, label: Folder, type: string, required: true }
-              - { name: label, label: Label, type: string, required: true }
-              - { name: label_zh, label: Label (中文), type: string }
+              - { name: lesson, label: "Syllabus lesson number (empty for Introduction, Glossary and similar)", type: number }
+              - { name: label, label: Title, type: string, required: true }
+              - { name: label_zh, label: Title (中文), type: string }
+              - { name: outcomes, label: Learning outcomes / main deliverables, type: text }
+              - { name: minHours, label: Study time from (hours), type: number }
+              - { name: maxHours, label: Study time to (hours), type: number }
+  - name: syllabus
+    label: Syllabus (intro and practice rows)
+    description: Everything else in the syllabus comes from the pages and from Modules & lessons.
+    type: file
+    path: src/data/syllabus.json
+    format: json
+    fields:
+      - { name: title, label: Syllabus title, type: string, required: true }
+      - { name: intro, label: Intro paragraphs, type: text, list: true }
+      - { name: overviewTitle, label: Module Overview title, type: string }
+      - name: fullPath
+        label: Full path (Module Overview total row)
+        type: object
+        fields:
+          - { name: purpose, label: Purpose, type: text }
+          - { name: notes, label: Notes, type: text }
+      - name: extraRows
+        label: Practice rows (syllabus rows with no handbook page)
+        type: object
+        list: true
+        fields:
+          - { name: row, label: Row ID, type: string, required: true, pattern: { regex: "^M\\d-L\\d+\\.\\d+$", message: "Row IDs look like M4-L1.2" } }
+          - { name: topics, label: What you learn, type: text }
+          - { name: resources, label: Resources (one per line), type: text }
