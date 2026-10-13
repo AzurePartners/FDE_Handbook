@@ -50,3 +50,19 @@ test('CSV escapes quotes and starts with a byte-order mark', () => {
   assert.equal(csv, '\ufeff"a ""b""","c,d"\r\n"1",""\r\n');
   assert.equal(flatRows(syllabus).length, allRows.length + 1);
 });
+
+test('the 中文 syllabus has the same rows, from the 中文 pages', () => {
+  const { syllabus: zh, problems: zhProblems } = buildSyllabus({ lang: 'zh' });
+  assert.deepEqual(zhProblems, []);
+  const zhRows = zh.modules.flatMap((m) => m.lessons.flatMap((l) => l.rows));
+  assert.deepEqual(zhRows.map((r) => r.row), allRows.map((r) => r.row));
+  const r = zhRows.find((x) => x.row === 'M0-L1.1');
+  const page = fs.readFileSync('src/content/docs/zh/m0/01-what-is-an-fde/01-forward-deployed-engineer.md', 'utf8');
+  const title = page.match(/^title:\s*["']?(.+?)["']?\s*$/m)[1];
+  const summary = page.match(/^\*\*一句话：\*\*\s*(.+)$/m)[1];
+  assert.equal(r.pages[0].id, 'zh/m0/01-what-is-an-fde/01-forward-deployed-engineer');
+  assert.equal(r.pages[0].title, title);
+  assert.ok(r.pages[0].summary.startsWith(summary.slice(0, 10)), r.pages[0].summary.slice(0, 40));
+  const { modules } = JSON.parse(fs.readFileSync('src/data/modules.json', 'utf8'));
+  assert.equal(zh.modules[0].name, modules[0].name_zh);
+});

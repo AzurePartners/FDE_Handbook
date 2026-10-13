@@ -1,0 +1,140 @@
+---
+// The Master Syllabus page (/syllabus and /zh/syllabus), generated from the handbook pages and
+// src/data at build time. Module goals, purposes, notes, lesson outcomes and the intro have no
+// 中文 source yet, so the 中文 page shows them in English.
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import { buildSyllabus } from '../lib/syllabus.mjs';
+import { formatHours } from '../lib/modules.mjs';
+
+interface Props {
+  lang?: 'en' | 'zh';
+}
+const { lang = 'en' } = Astro.props;
+const zh = lang === 'zh';
+const t = zh
+  ? { title: '课程大纲', overview: '模块概览', module: '模块', lessons: '课数', studyTime: '学习时长', purpose: '目的',
+      fullPath: '完整路径', goal: '目标：', lessonCount: (n: number) => `${n} 课`, lesson: (n: number, title: string) => `第 ${n} 课 · ${title}`,
+      outcomes: '学习成果：', whatYouLearn: '学习内容', resources: '资源', practice: '实践', link: (n: number) => `链接 ${n}`,
+      hours: (min: number, max: number) => formatHours(min, max, ' 小时') }
+  : { title: 'Syllabus', overview: 'Module overview', module: 'Module', lessons: 'Lessons', studyTime: 'Study time', purpose: 'Purpose',
+      fullPath: 'Full path', goal: 'Goal:', lessonCount: (n: number) => `${n} lessons`, lesson: (n: number, title: string) => `Lesson ${n} · ${title}`,
+      outcomes: 'Learning outcomes:', whatYouLearn: 'What you learn', resources: 'Resources', practice: 'Practice', link: (n: number) => `link ${n}`,
+      hours: (min: number, max: number) => formatHours(min, max) };
+
+const { syllabus, problems } = buildSyllabus({ lang });
+if (problems.length) throw new Error(`Syllabus problems:\n${problems.join('\n')}`);
+
+const total = syllabus.modules.reduce(
+  (sum, m) => ({ lessons: sum.lessons + m.lessons.length, min: sum.min + m.minHours, max: sum.max + m.maxHours }),
+  { lessons: 0, min: 0, max: 0 },
+);
+const headings = syllabus.modules.map((m) => ({ depth: 2, slug: m.dir, text: `${m.code} · ${m.name}` }));
+const built = new Date().toISOString().slice(0, 10);
+---
+
+<StarlightPage frontmatter={{ title: t.title, description: syllabus.title, tableOfContents: { maxHeadingLevel: 2 } }} headings={headings}>
+  <div class="syllabus">
+    {syllabus.intro.map((text) => <p>{text}</p>)}
+    {zh ? (
+      <p class="syllabus-note">
+        根据手册于 {built} 生成：主题和资源来自各页面，学习成果和学习时长来自面板中的 <strong>Modules &amp; lessons</strong>。要修改大纲，请修改这些内容。模块目标、目的和学习成果目前只有英文。<a
+        href="/syllabus.csv" download>下载 CSV（英文）</a>（可用 Excel 或 Google 表格打开）。
+      </p>
+    ) : (
+      <p class="syllabus-note">
+        Generated from the handbook on {built}: topics and resources come from each page, and lesson outcomes and study
+        times from <strong>Modules &amp; lessons</strong> in the dashboard. To change the syllabus, change those.{' '}
+        <a href="/syllabus.csv" download>Download as CSV</a> (opens in Excel or Google Sheets).
+      </p>
+    )}
+
+    <h2 id="overview">{t.overview}</h2>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>{t.module}</th><th class="nowrap">{t.lessons}</th><th>{t.studyTime}</th><th>{t.purpose}</th></tr></thead>
+        <tbody>
+          {syllabus.modules.map((m) => (
+            <tr>
+              <td><a href={`#${m.dir}`}>{m.code} · {m.name}</a></td>
+              <td>{m.lessons.length}</td>
+              <td class="nowrap">{t.hours(m.minHours, m.maxHours)}</td>
+              <td>{m.purpose}</td>
+            </tr>
+          ))}
+          <tr class="total">
+            <td>{t.fullPath}</td>
+            <td>{total.lessons}</td>
+            <td class="nowrap">{t.hours(Math.round(total.min * 10) / 10, Math.round(total.max * 10) / 10)}</td>
+            <td>{syllabus.fullPath.purpose}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    {syllabus.modules.map((m) => (
+      <section>
+        <h2 id={m.dir}>{m.code} · {m.name}</h2>
+        <p><strong>{t.goal}</strong> {m.goal}</p>
+        <p class="syllabus-meta">{t.lessonCount(m.lessons.length)} · {t.hours(m.minHours, m.maxHours)} · {m.notes}</p>
+        {m.lessons.map((l) => (
+          <>
+            <h3 id={`${m.dir}-l${l.lesson}`}>{t.lesson(l.lesson, l.title)}</h3>
+            <p class="syllabus-meta">{t.hours(l.minHours, l.maxHours)}</p>
+            <p><strong>{t.outcomes}</strong> {l.outcomes}</p>
+            <div class="tbl">
+              <table class="rows">
+                <thead><tr><th>Row ID</th><th>{t.whatYouLearn}</th><th>{t.resources}</th></tr></thead>
+                <tbody>
+                  {l.rows.map((r) => (
+                    <tr>
+                      <td class="nowrap"><code>{r.row}</code></td>
+                      <td>
+                        {r.practice ? (
+                          <>
+                            <span class="tag">{t.practice}</span> {r.topics}
+                          </>
+                        ) : (
+                          r.pages.map((p) => (
+                            <p>
+                              <a href={`/${p.id}/`}>{p.title}</a>{zh ? '：' : ': '}{p.summary}
+                            </p>
+                          ))
+                        )}
+                      </td>
+                      <td>
+                        <ul>
+                          {r.resourceItems.map((x) => (
+                            <li>
+                              {x.urls.length ? <a href={x.urls[0]}>{x.text}</a> : x.text}
+                              {x.urls.slice(1).map((u, i) => <> · <a href={u}>{t.link(i + 2)}</a></>)}
+                            </li>
+                          ))}
+                        </ul>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        ))}
+      </section>
+    ))}
+  </div>
+</StarlightPage>
+
+<style>
+  .syllabus-note { font-size: var(--sl-text-sm); color: var(--sl-color-gray-3); }
+  .syllabus-meta { font-size: var(--sl-text-sm); color: var(--sl-color-gray-3); margin-top: 0.25rem; }
+  .tbl { overflow-x: auto; }
+  .syllabus table { font-size: var(--sl-text-sm); display: table; width: 100%; }
+  .syllabus td, .syllabus th { vertical-align: top; }
+  .syllabus td p { margin: 0 0 0.4rem; }
+  .syllabus td ul { margin: 0; padding-left: 1rem; }
+  .syllabus table.rows td:nth-child(2) { min-width: 18rem; }
+  .syllabus table.rows td:nth-child(3) { min-width: 14rem; }
+  .nowrap { white-space: nowrap; }
+  .total td { font-weight: 600; }
+  .tag { font-size: var(--sl-text-xs); font-weight: 600; padding: 0.05rem 0.4rem; border-radius: 0.25rem;
+    background: var(--sl-color-accent-low); color: var(--sl-color-accent-high); }
+</style>

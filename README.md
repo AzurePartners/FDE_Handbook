@@ -22,8 +22,8 @@ src/content/docs/
 src/data/modules.json              modules and lessons: names, goals, learning outcomes, study time
 src/data/syllabus.json             syllabus intro text and the practice rows that have no page
 src/lib/syllabus.mjs               builds the syllabus from the pages + the two files above
-src/pages/syllabus.astro, syllabus.csv.ts   the Syllabus page and its CSV download
-src/components/, src/styles/       page header and handbook look
+src/pages/syllabus.astro, zh/syllabus.astro, syllabus.csv.ts   the Syllabus page (English, 中文) and its CSV download
+src/components/, src/styles/       page header, syllabus layout and handbook look
 src/plugins/remark-md-links.mjs    turns ../lesson/page.md links into site URLs
 src/auth/basic-auth.js, middleware.js   username/password protection on Vercel
 scripts/check-content.mjs          content checks (CI)
