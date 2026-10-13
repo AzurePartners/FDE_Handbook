@@ -122,6 +122,7 @@
       "code": "M2",
       "dir": "m2",
       "name": "AI Application Engineering",
+      "name_zh": "AI 应用工程",
       "purpose": "Turn LLMs from “chat tools” into verifiable, integrable application capabilities. Use a Tutor / Customer Support RAG case to build foundations in prompting, RAG, tool calling, evaluation, and guardrails.",
       "goal": "turn LLMs from “chat tools” into verifiable, integrable application capabilities. Use a Tutor / Customer Support RAG case to establish foundations in prompting, RAG, tool calling, evaluation, and guardrails.",
       "notes": "Skip mastered modules based on the entry assessment",
@@ -130,6 +131,7 @@
           "dir": "07-llm-application-foundations",
           "lesson": 1,
           "label": "LLM Application Foundations: From Chat to Programmatic Use",
+          "label_zh": "LLM 应用基础：从聊天到程序化使用",
           "outcomes": "Call an LLM from code, explain model inputs and outputs, and understand that good chat behavior does not equal system reliability.",
           "minHours": 4,
           "maxHours": 6
@@ -138,6 +140,7 @@
           "dir": "08-prompting-context-structured-output",
           "lesson": 2,
           "label": "Prompting, Context & Structured Output",
+          "label_zh": "提示词、上下文与结构化输出",
           "outcomes": "Design reusable prompts and structured-output contracts, and explain why prompts may fail in different contexts.",
           "minHours": 4,
           "maxHours": 6
@@ -146,6 +149,7 @@
           "dir": "09-rag-knowledge-bases",
           "lesson": 3,
           "label": "RAG & Knowledge Bases: Tutor / Support Assistant",
+          "label_zh": "RAG 与知识库：辅导 / 客服助手",
           "outcomes": "Build a basic RAG assistant that cites sources, identifies knowledge gaps, and escalates to a human when evidence is insufficient.",
           "minHours": 6,
           "maxHours": 9
@@ -154,6 +158,7 @@
           "dir": "10-tool-calling-deterministic-logic",
           "lesson": 4,
           "label": "Tool Calling & Deterministic Logic",
+          "label_zh": "Tool calling 与确定性逻辑",
           "outcomes": "Separate model judgment from deterministic execution, design a verifiable tool, and enable the LLM to call it correctly.",
           "minHours": 5,
           "maxHours": 8
@@ -162,6 +167,7 @@
           "dir": "11-ai-evaluation",
           "lesson": 5,
           "label": "AI Evaluation: Proving It Actually Works",
+          "label_zh": "AI 评测：证明它真的有效",
           "outcomes": "Build a minimum viable evaluation set, document failure cases, and use evidence rather than intuition to judge whether changes improve the system.",
           "minHours": 5,
           "maxHours": 8
@@ -170,6 +176,7 @@
           "dir": "12-safety-guardrails-hitl",
           "lesson": 6,
           "label": "Safety, Guardrails & Human-in-the-Loop",
+          "label_zh": "安全、护栏与人在回路",
           "outcomes": "Define basic safety boundaries and human checkpoints for an AI application, without confusing “the model can answer” with “the model is allowed to act.”",
           "minHours": 4,
           "maxHours": 6
@@ -180,6 +187,7 @@
       "code": "M3",
       "dir": "m3",
       "name": "Agent Engineering — From Prompts to Scalable Agent Systems",
+      "name_zh": "Agent 工程：从提示词到可扩展的 agent 系统",
       "purpose": "Define an agent as a job with real boundaries, give it reusable skills backed by code where needed, choose between a workflow, a single agent and multiple agents, and make its state, long-running work and failures manageable. An agent is not simply a prompt, and more agents are not automatically better.",
       "goal": "define an agent as a job with real boundaries (Profile, with Knowledge kept separate), give it reusable Skills backed by code where steps must repeat exactly, choose between a workflow, a single agent and multiple agents, then make its state, long-running work and failures manageable. An agent is not merely a prompt, and more agents do not automatically mean a better system.",
       "notes": "Skip mastered modules based on the entry assessment",
@@ -188,6 +196,7 @@
           "dir": "13-agent-profiles",
           "lesson": 1,
           "label": "Start with Profile.md: Define an Agent with Real Boundaries",
+          "label_zh": "从 Profile.md 开始：定义边界明确的 agent",
           "outcomes": "Define an agent with clear boundaries from business responsibilities rather than writing a one-line role prompt.",
           "minHours": 4,
           "maxHours": 6
@@ -196,6 +205,7 @@
           "dir": "14-agent-skills",
           "lesson": 2,
           "label": "Skills: Decompose Agent Capabilities into Reusable Units",
+          "label_zh": "Skill：把 agent 能力拆分为可复用单元",
           "outcomes": "Decompose a complex agent into maintainable, testable, reusable skills and identify where code is required.",
           "minHours": 5,
           "maxHours": 8
@@ -204,6 +214,7 @@
           "dir": "15-agent-architectures",
           "lesson": 3,
           "label": "Workflow, Single Agent, or Multi-Agent?",
+          "label_zh": "工作流、单 agent 还是多 agent？",
           "outcomes": "Choose the simplest viable architecture based on task complexity and risk, and justify the design with business reasons rather than “multi-agent is more advanced.”",
           "minHours": 6,
           "maxHours": 9
@@ -212,6 +223,7 @@
           "dir": "16-agent-state-memory",
           "lesson": 4,
           "label": "State, Memory & Context Persistence",
+          "label_zh": "状态、记忆与上下文持久化",
           "outcomes": "Design state and memory boundaries for agents, and distinguish “a lot of context” from reliable persistence.",
           "minHours": 5,
           "maxHours": 8
@@ -220,6 +232,7 @@
           "dir": "17-persistent-agents",
           "lesson": 5,
           "label": "Persistent Agents: Queues, Recovery, Concurrency & HITL",
+          "label_zh": "持久型 agent：队列、恢复、并发与人在回路",
           "outcomes": "Understand persistent-agent execution and explain how tasks are queued, recovered, deduplicated, and paused for human approval at critical points.",
           "minHours": 6,
           "maxHours": 10
@@ -228,6 +241,7 @@
           "dir": "18-agent-evaluation-debugging",
           "lesson": 6,
           "label": "Agent Evaluation, Tracing & Debugging",
+          "label_zh": "Agent 评测、追踪与调试",
           "outcomes": "Locate failures within an agent workflow and use traces/evaluations—not endless prompt rewriting—to fix them.",
           "minHours": 5,
           "maxHours": 8
@@ -238,18 +252,21 @@
       "code": "M4",
       "dir": "m4",
       "name": "Enterprise Integration & Production AI",
+      "name_zh": "企业集成与生产级 AI",
       "purpose": "Teach learners that real customer environments involve data, APIs, permissions, security, deployment, observability, cost, and reliability beyond prompts/agents, and develop judgment about when deeper engineering is required.",
       "goal": "show that real customer environments involve data, APIs, permissions, security, deployment, observability, cost, and reliability beyond prompts and agents. Learners should know when deeper engineering is required.",
       "notes": "Skip mastered modules based on the entry assessment",
       "lessons": [
         {
           "dir": "00-overview",
-          "label": "Overview"
+          "label": "Overview",
+          "label_zh": "概览"
         },
         {
           "dir": "01-external-apis-mcp-and-connector-design",
           "lesson": 1,
           "label": "External APIs, MCP & Connector Design",
+          "label_zh": "外部 API、MCP 与连接器设计",
           "outcomes": "Explain the difference between APIs and MCP, and connect external data or actions to agents through clear, replaceable interfaces.",
           "minHours": 6,
           "maxHours": 9
@@ -258,6 +275,7 @@
           "dir": "02-authentication-authorization-rbac-and-secrets",
           "lesson": 2,
           "label": "Authentication, Authorization, RBAC & Secrets",
+          "label_zh": "认证、授权、RBAC 与密钥",
           "outcomes": "Design a basic permission model and understand that prompts cannot replace real authentication and authorization controls.",
           "minHours": 5,
           "maxHours": 8
@@ -266,6 +284,7 @@
           "dir": "03-real-world-data-quality-freshness-provenance-and-entity",
           "lesson": 3,
           "label": "Real-World Data: Quality, Freshness, Provenance & Entity Resolution",
+          "label_zh": "真实世界的数据：质量、新鲜度、溯源与实体解析",
           "outcomes": "Identify major risks in real data, design provenance/freshness/entity-alignment rules, and clearly state which conclusions remain unverified.",
           "minHours": 6,
           "maxHours": 9
@@ -274,6 +293,7 @@
           "dir": "04-reliability-cost-latency-and-scale",
           "lesson": 4,
           "label": "Reliability, Cost, Latency & Scale",
+          "label_zh": "可靠性、成本、延迟与规模",
           "outcomes": "Make basic performance and cost trade-offs and recognize when a demo architecture can no longer support real users.",
           "minHours": 5,
           "maxHours": 8
@@ -282,6 +302,7 @@
           "dir": "05-deployment-ci-cd-observability-and-production-readiness",
           "lesson": 5,
           "label": "Deployment, CI/CD, Observability & Production Readiness",
+          "label_zh": "部署、CI/CD、可观测性与生产就绪",
           "outcomes": "Explain what an AI application still needs to move from a local demo to an internal pilot and production, and produce basic deployment/run evidence.",
           "minHours": 5,
           "maxHours": 8
@@ -292,18 +313,21 @@
       "code": "M5",
       "dir": "m5",
       "name": "FDE Discovery, Consulting & Delivery",
+      "name_zh": "FDE 需求发现、咨询与交付",
       "purpose": "Train the core capabilities that distinguish FDEs from typical AI Engineers: entering ambiguous customer environments, finding the real problem, defining outcomes, managing scope, making technical/business trade-offs, and driving pilots, acceptance, handoff, and productization.",
       "goal": "train the core capabilities that distinguish an FDE from a typical AI Engineer—entering ambiguous customer environments, finding the real problem, defining outcomes, managing scope, making technical/business trade-offs, and driving pilots, acceptance, handoff, and productization.",
       "notes": "Skip mastered modules based on the entry assessment",
       "lessons": [
         {
           "dir": "00-overview",
-          "label": "Overview"
+          "label": "Overview",
+          "label_zh": "概览"
         },
         {
           "dir": "01-the-fde-role-and-end-to-end-delivery-lifecycle",
           "lesson": 1,
           "label": "The FDE Role & End-to-End Delivery Lifecycle",
+          "label_zh": "FDE 角色与端到端交付生命周期",
           "outcomes": "Understand the full scope of FDE work, recognize that technical capability is only one part, and complete a personal skill-gap assessment.",
           "minHours": 4,
           "maxHours": 6
@@ -312,6 +336,7 @@
           "dir": "02-customer-discovery-and-stakeholder-interviews",
           "lesson": 2,
           "label": "Customer Discovery & Stakeholder Interviews",
+          "label_zh": "客户需求发现与利益相关方访谈",
           "outcomes": "Run a structured discovery session, identify key stakeholders, real problems, and information gaps, and produce reviewable interview notes.",
           "minHours": 6,
           "maxHours": 9
@@ -320,6 +345,7 @@
           "dir": "03-as-is-to-be-workflow-mapping-and-requirement-decomposition",
           "lesson": 3,
           "label": "As-Is / To-Be Workflow Mapping & Requirement Decomposition",
+          "label_zh": "现状 / 目标状态工作流梳理与需求拆分",
           "outcomes": "Translate ambiguous requests into clear business workflows and identify where AI should actually intervene.",
           "minHours": 5,
           "maxHours": 8
@@ -328,6 +354,7 @@
           "dir": "04-scope-prd-sow-acceptance-criteria-and-non-goals",
           "lesson": 4,
           "label": "Scope, PRD/SOW, Acceptance Criteria & Non-Goals",
+          "label_zh": "范围、PRD/SOW、验收标准与非目标",
           "outcomes": "Write an implementable and testable mini PRD/SOW and protect the project from unlimited scope creep.",
           "minHours": 5,
           "maxHours": 8
@@ -336,6 +363,7 @@
           "dir": "05-solution-architecture-choose-the-simplest-architecture-that",
           "lesson": 5,
           "label": "Solution Architecture: Choose the Simplest Architecture That Works",
+          "label_zh": "解决方案架构：选择最简单可行的架构",
           "outcomes": "Choose the minimum viable architecture based on customer value, time, risk, and team capability, and explain how it can evolve later.",
           "minHours": 5,
           "maxHours": 8
@@ -344,6 +372,7 @@
           "dir": "06-demo-feedback-and-change-management",
           "lesson": 6,
           "label": "Demo, Feedback & Change Management",
+          "label_zh": "演示、反馈与变更管理",
           "outcomes": "Run a demo for non-technical stakeholders and clearly explain trade-offs when new requests appear instead of agreeing unconditionally.",
           "minHours": 4,
           "maxHours": 7
@@ -352,6 +381,7 @@
           "dir": "07-pilot-value-handoff-and-productization",
           "lesson": 7,
           "label": "Pilot, Value, Handoff & Productization",
+          "label_zh": "试点、价值、交接与产品化",
           "outcomes": "Design both business and technical metrics for a pilot and use evidence to explain project value and uncertainty. Hand a project over so others can run it and extract reusable assets rather than keeping all knowledge in one person’s head.",
           "minHours": 10,
           "maxHours": 16

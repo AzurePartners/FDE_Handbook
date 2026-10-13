@@ -20,7 +20,11 @@ test('every page Row ID and every practice row appears exactly once', () => {
 
 test('rows use the page title and its one-sentence summary', () => {
   const r = allRows.find((x) => x.row === 'M0-L1.1');
-  assert.match(r.topics, /^Forward Deployed Engineer: A Forward Deployed Engineer \(FDE\) is an engineer/);
+  // Read the page itself rather than hard-coding its title: editors retitle pages in the dashboard.
+  const page = fs.readFileSync('src/content/docs/m0/01-what-is-an-fde/01-forward-deployed-engineer.md', 'utf8');
+  const title = page.match(/^title:\s*["']?(.+?)["']?\s*$/m)[1];
+  const summary = page.match(/^\*\*In one sentence:\*\*\s*(.+)$/m)[1];
+  assert.ok(r.topics.startsWith(`${title}: ${summary.slice(0, 30)}`), r.topics.slice(0, 80));
   assert.match(r.resources, /^• .+ — https:\/\//);
 });
 
