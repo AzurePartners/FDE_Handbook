@@ -18,7 +18,7 @@ src/content/docs/
 ├─ m0/ … m8/                       English pages: <module>/<lesson folder>/<page>.md
 └─ zh/
    ├─ index.mdx                    home page (中文)
-   └─ m0/ m1/ m6/ m7/ m8/          中文 pages, same paths; a missing page falls back to English
+   └─ m0/ … m8/                    中文 pages, same paths; a missing page falls back to English
 src/data/modules.json              modules and lessons: names, goals, learning outcomes, study time
 src/data/syllabus.json             syllabus intro text and the practice rows that have no page
 src/lib/syllabus.mjs               builds the syllabus from the pages + the two files above
