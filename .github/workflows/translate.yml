@@ -1,0 +1,80 @@
+# Keeps English and 中文 pages in sync on every branch except main: after each push (a dashboard
+# save, a pull request branch) it carries an edit in either language over to the other one with the
+# Claude API (scripts/translate.mjs) and commits the result to the same branch. CI's content check
+# fails until a pair is in sync again, so main only ever receives synced pages.
+#
+# Setup: repository secret ANTHROPIC_API_KEY; optional repository variable TRANSLATE_MODEL
+# (default claude-opus-5-5). See README, "Automatic translation".
+name: Translate
+
+on:
+  push:
+    branches-ignore: [main]
+    paths:
+      - 'src/content/docs/**'
+      - 'src/data/translations.json'
+  workflow_dispatch:
+    inputs:
+      max_pages:
+        description: Most pages to translate in this run
+        default: '20'
+
+permissions:
+  contents: write # commit the translations
+  actions: write # start CI on the new commit
+
+concurrency:
+  group: translate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0 # the translator reads earlier versions of a page from history
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Translate pages that are out of sync
+        id: translate
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TRANSLATE_MODEL: ${{ vars.TRANSLATE_MODEL }}
+          TRANSLATE_MAX_PAGES: ${{ inputs.max_pages || '20' }}
+        run: |
+          set +e
+          npm run --silent translate
+          echo "status=$?" >> "$GITHUB_OUTPUT"
+      - name: Commit and push the translations
+        id: push
+        run: |
+          git add -A src/content/docs src/data/translations.json
+          if git diff --cached --quiet; then
+            echo "Nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -m "Translate pages edited in ${GITHUB_SHA::7}" -m "$(git diff --cached --name-only | sed 's/^/- /')"
+          if ! git push origin "HEAD:${GITHUB_REF_NAME}"; then
+            echo "::notice::The branch moved on while translating; the run for the newer push takes over."
+            exit 0
+          fi
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+      # Pushes made with GITHUB_TOKEN start no workflows, so start CI on the new commit explicitly:
+      # without it the branch head (and the pull request) would have no check result.
+      - name: Run CI on the translated commit
+        if: steps.push.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run ci.yml --ref "$GITHUB_REF_NAME"
+      - name: Fail if some pages could not be translated
+        if: steps.translate.outputs.status != '0'
+        run: |
+          echo "::error::Some pages are still out of sync (exit code ${{ steps.translate.outputs.status }}). See the log above: 2 means ANTHROPIC_API_KEY is not set."
+          exit 1

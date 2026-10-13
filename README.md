@@ -7,6 +7,7 @@ The Azure Partners Forward Deployed Engineer handbook (Modules 0–8, English an
 - **Dashboard:** [Pages CMS](https://app.pagescms.org) for editing pages in the browser, configured in [`.pages.yml`](.pages.yml).
 - **Syllabus:** generated from the pages on every publish: the site's **Syllabus** page, a CSV download, and a read-only copy in the Google Sheet.
 - **Checks:** every pull request runs the content checks (`npm run check`), the unit tests and a full build.
+- **Translation:** English and 中文 stay in sync automatically: an edit in either language is translated into the other on its branch (Claude API), and the checks fail while a pair is out of sync.
 
 How to edit: see [CONTRIBUTING.md](CONTRIBUTING.md). Why it is built this way and what comes next: see [docs/PLAN.md](docs/PLAN.md).
 
@@ -18,15 +19,18 @@ src/content/docs/
 ├─ m0/ … m8/                       English pages: <module>/<lesson folder>/<page>.md
 └─ zh/
    ├─ index.mdx                    home page (中文)
-   └─ m0/ … m8/                    中文 pages, same paths; a missing page falls back to English
+   └─ m0/ … m8/                    中文 pages, same paths
 src/data/modules.json              modules and lessons: names, goals, learning outcomes, study time
+src/data/translations.json         English/中文 sync record (written by scripts/translate.mjs)
 src/data/syllabus.json             syllabus intro text and the practice rows that have no page
-src/lib/syllabus.mjs               builds the syllabus from the pages + the two files above
+src/lib/syllabus.mjs               builds the syllabus from the pages + modules.json and syllabus.json
+src/lib/translations.mjs           which English/中文 pairs are out of sync
 src/pages/syllabus.astro, zh/syllabus.astro, syllabus.csv.ts   the Syllabus page (English, 中文) and its CSV download
 src/components/, src/styles/       page header, syllabus layout and handbook look
 src/plugins/remark-md-links.mjs    turns ../lesson/page.md links into site URLs
 src/auth/basic-auth.js, middleware.js   username/password protection on Vercel
 scripts/check-content.mjs          content checks (CI)
+scripts/translate.mjs, translate-guide.md   carries an edit over to the other language (Translate workflow)
 scripts/sync-syllabus-sheet.mjs    writes the syllabus into the Google Sheet (read-only copy)
 scripts/import-artifacts.mjs       one-off import from the published artifacts
 ```
@@ -37,6 +41,7 @@ scripts/import-artifacts.mjs       one-off import from the published artifacts
 npm install
 npm run dev        # http://localhost:4321, live reload; no password locally
 npm run check      # content checks (add -- --verbose for every warning)
+npm run translate  # sync English and 中文 (needs ANTHROPIC_API_KEY; add -- --dry-run to only list)
 npm test           # unit tests
 npm run build      # the full site into dist/
 ```
@@ -77,3 +82,13 @@ After every change to `main`, the **Syllabus sheet** workflow rewrites the **Mod
 5. **Actions → Syllabus sheet → Run workflow** once, then check the sheet.
 
 Until the secret exists the workflow skips with a notice. `npm run sync-sheet -- --dry-run` shows locally what would be written.
+
+### 5. Automatic translation
+
+After every push to a branch other than `main` (a dashboard save on `drafts`, a pull request branch), the **Translate** workflow finds the pages whose English or 中文 side changed since the last sync, translates the edit into the other language with the Claude API, checks the result with `npm run check`, commits it to the same branch and starts CI on that commit. Until then CI on the edit itself is red with `TRANSLATION_SYNC_FAILED`; that is expected and clears in a few minutes.
+
+1. Create an API key in the [Claude Console](https://platform.claude.com) and, under the key's workspace limits, set a monthly spend limit (for example $100). One page costs roughly $0.15–0.25 with the default model.
+2. In GitHub, **Settings → Secrets and variables → Actions**: add the secret `ANTHROPIC_API_KEY`. Optionally add the variable `TRANSLATE_MODEL` (default `claude-opus-5-5`; `claude-sonnet-5-5` costs about half).
+3. Push an edit to any branch and watch **Actions → Translate**.
+
+Without the secret the Translate run fails and says so, and CI stays red for edited pages. A run translates at most 20 pages; for more, use **Actions → Translate → Run workflow** with a higher limit, or `npm run translate -- --max-pages 50` locally. The guide sent with every request is [`scripts/translate-guide.md`](scripts/translate-guide.md); edit it to change terminology or style.

@@ -4,6 +4,7 @@ on:
   pull_request:
   push:
     branches: [main, drafts]
+  workflow_dispatch: # started by the Translate workflow after it commits translations
 
 jobs:
   check:
@@ -11,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          fetch-depth: 0 # full history, for the "translation older than English page" check
+          fetch-depth: 0 # full history, for each page's "Last updated" date
       - uses: actions/setup-node@v5
         with:
           node-version: 22

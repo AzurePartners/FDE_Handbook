@@ -94,7 +94,8 @@ Plus two Google Sheets: **AP_FDE_Master_Curriculum** (Module Overview, Master Sy
 - **Drafts flow:** dashboard edits are saved to `drafts`, Vercel previews that branch, and a workflow keeps one "Publish dashboard edits" pull request open into `main`. Merging it publishes the edits. Every push to `main` is merged back into `drafts`.
 - **Checks (`npm run check`, run in CI):**
   - Errors: a missing title, a malformed Row ID, a broken page link, an artifact link, a 中文 page with no English page, or a lesson folder missing from `modules.json`.
-  - Warnings: a page missing a template section, or a 中文 page older than its English page.
+  - Errors also cover English/中文 sync: a pair where one side changed since the last translation (`TRANSLATION_SYNC_FAILED`), a 中文 Row ID that differs from the English page's. The Translate workflow brings pairs back in sync with the Claude API (README, "Automatic translation").
+  - Warnings: a page missing a template section (English or 中文 headings), or a 中文 page marked `outdated: true`.
 
 ## 5. Status
 

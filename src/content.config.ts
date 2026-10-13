@@ -14,6 +14,8 @@ export const collections = {
         row: rowId.optional(),
         // Pages that cover several syllabus rows list all of them; `row` is the primary one.
         rows: z.array(rowId).optional(),
+        // 中文 pages only: the translation is knowingly behind its English page (see CONTRIBUTING.md).
+        outdated: z.boolean().optional(),
       }),
     }),
   }),

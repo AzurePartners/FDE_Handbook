@@ -1,6 +1,8 @@
 ---
-// Starlight's page title, with the module / lesson breadcrumb and the syllabus Row ID(s) above it.
+// Starlight's page title, with the module / lesson breadcrumb and the syllabus Row ID(s) above it,
+// and a notice under it on a 中文 page marked `outdated: true`.
 import Default from '@astrojs/starlight/components/PageTitle.astro';
+import ContentNotice from '@astrojs/starlight/components/ContentNotice.astro';
 import { modules } from '../data/modules.json';
 import { lessonLabel } from '../lib/modules.mjs';
 
@@ -22,3 +24,8 @@ const rows = entry.data.rows ?? (entry.data.row ? [entry.data.row] : []);
   )
 }
 <Default />
+{
+  zh && entry.data.outdated && (
+    <ContentNotice icon="warning" label="此页翻译还没有跟上英文原文的最新修改，请以英文版为准（右上角切换语言）。" />
+  )
+}

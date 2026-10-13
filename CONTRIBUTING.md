@@ -68,7 +68,12 @@ row: M0-L1.1
 
 ## 中文 pages
 
-A translation lives at the same path under `src/content/docs/zh/`. If it is missing, the 中文 site shows the English page with a "not translated yet" notice. When you change an English page, update its translation too, or leave it. The check lists translations older than their English page, so they are easy to find later.
+A translation lives at the same path under `src/content/docs/zh/`, and the two are kept in sync automatically: edit either language and, a few minutes after the save or push, the **Translate** workflow commits the same change in the other language to the same branch (see README, "Automatic translation"). Review that commit in the publish pull request like any other edit. Until it lands, CI shows `TRANSLATION_SYNC_FAILED` for the page.
+
+- A new page needs only one language; the other is created for you. To delete a page, delete the English one; its 中文 page goes with it.
+- If you edit both languages yourself, the workflow just records them as in sync, provided the checks pass.
+- To publish an English change before its translation, tick **翻译已过时** on the 中文 page in the dashboard (`outdated: true`). The 中文 page then shows a notice, and the next translation clears the tick.
+- The sync record is `src/data/translations.json`. Don't edit it by hand; `npm run translate` maintains it.
 
 ## Syllabus
 

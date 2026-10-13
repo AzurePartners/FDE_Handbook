@@ -9,7 +9,8 @@
     "check": "node scripts/check-content.mjs",
     "import": "node scripts/import-artifacts.mjs",
     "test": "node --test tests/*.test.mjs",
-    "sync-sheet": "node scripts/sync-syllabus-sheet.mjs"
+    "sync-sheet": "node scripts/sync-syllabus-sheet.mjs",
+    "translate": "node scripts/translate.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.2",
@@ -20,6 +21,7 @@
     "yaml": "^2.9.1"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.133.0",
     "turndown": "^7.2.4",
     "turndown-plugin-gfm": "^1.0.2"
   },

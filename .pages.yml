@@ -145,7 +145,33 @@ content:
           layout: tree
           primary: title
           fields: [title, row]
-        fields: *page-fields
+        # The English page fields plus the "translation out of date" checkbox (CONTRIBUTING.md, 中文 pages).
+        fields: &zh-page-fields
+          - name: title
+            label: Title
+            type: string
+            required: true
+          - name: row
+            label: Syllabus Row ID
+            description: The Master Syllabus row this page covers, e.g. M4-L1.2. Leave empty for introductions.
+            type: string
+            pattern:
+              regex: "^(M\\d-L\\d+\\.\\d+)?$"
+              message: "Row IDs look like M4-L1.2"
+          - name: rows
+            label: All syllabus rows (only for pages covering several rows)
+            type: string
+            list: true
+          - name: outdated
+            label: 翻译已过时 (translation out of date)
+            description: 英文页改了、中文暂时不跟时勾选；页面会显示提示。翻译更新后会自动取消。
+            type: boolean
+          - name: body
+            label: Page content (Markdown)
+            description: "Write Markdown. Link to another page by its file path, e.g. ../02-lesson/03-page.md"
+            type: code
+            options:
+              format: markdown
       - name: zh-m1
         label: "M1 · AI 辅助开发与软件系统基础"
         type: collection
@@ -156,7 +182,7 @@ content:
           layout: tree
           primary: title
           fields: [title, row]
-        fields: *page-fields
+        fields: *zh-page-fields
       - name: zh-m2
         label: "M2 · AI 应用工程"
         type: collection
@@ -167,7 +193,7 @@ content:
           layout: tree
           primary: title
           fields: [title, row]
-        fields: *page-fields
+        fields: *zh-page-fields
       - name: zh-m3
         label: "M3 · Agent 工程：从提示词到可扩展的 agent 系统"
         type: collection
@@ -178,7 +204,7 @@ content:
           layout: tree
           primary: title
           fields: [title, row]
-        fields: *page-fields
+        fields: *zh-page-fields
       - name: zh-m4
         label: "M4 · 企业集成与生产级 AI"
         type: collection
@@ -189,7 +215,7 @@ content:
           layout: tree
           primary: title
           fields: [title, row]
-        fields: *page-fields
+        fields: *zh-page-fields
       - name: zh-m5
         label: "M5 · FDE 需求发现、咨询与交付"
         type: collection
@@ -200,7 +226,7 @@ content:
           layout: tree
           primary: title
           fields: [title, row]
-        fields: *page-fields
+        fields: *zh-page-fields
       - name: zh-m6
         label: "M6 · 四个代表性 FDE 用例原型"
         type: collection
@@ -211,7 +237,7 @@ content:
           layout: tree
           primary: title
           fields: [title, row]
-        fields: *page-fields
+        fields: *zh-page-fields
       - name: zh-m7
         label: "M7 · FDE 端到端实战"
         type: collection
@@ -222,7 +248,7 @@ content:
           layout: tree
           primary: title
           fields: [title, row]
-        fields: *page-fields
+        fields: *zh-page-fields
       - name: zh-m8
         label: "M8 · 就业准备与 FDE 面试"
         type: collection
@@ -233,7 +259,7 @@ content:
           layout: tree
           primary: title
           fields: [title, row]
-        fields: *page-fields
+        fields: *zh-page-fields
   - name: modules
     label: Modules & lessons (names, outcomes, study time)
     description: These names appear in the sidebar and in the syllabus. A module's study time is the sum of its lessons'.

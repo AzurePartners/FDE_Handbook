@@ -15,7 +15,7 @@ Follow CONTRIBUTING.md "How pages are written". In short:
 - Knowledge-point pages (M0–M5, M8) keep the seven sections in order: What it is, Why an FDE needs this, Key concepts, Common misconceptions, Typical interview questions, Learn more, Related. 中文 headings: 是什么, FDE 为什么需要, 核心概念, 常见误区, 典型面试题, 延伸阅读, 相关页面.
 - Interview questions use `<details>` / `<summary>` with a blank line after `</summary>` and before `</details>`.
 - Link to other pages with relative `.md` paths. Never use claude.ai artifact URLs.
-- A 中文 page mirrors its English page's path under `src/content/docs/zh/`. When changing an English page that has a translation, update the translation in the same change, or say in the PR that it is now out of date.
+- A 中文 page mirrors its English page's path under `src/content/docs/zh/`. The two must stay in sync (`npm run check` fails with TRANSLATION_SYNC_FAILED otherwise): either update both and run `npm run translate` to record them, or push and let the Translate workflow translate the change (see CONTRIBUTING.md, 中文 pages).
 - One topic owns each concept (see the Review Log decisions: M0 owns the FDE role definition and the lifecycle; M4-L5.4 owns the maturity ladder; M3-L3.5 owns workflow vs agent vs multi-agent). Other pages link to the owner instead of re-teaching it.
 
 ## Structure changes
