@@ -10,7 +10,7 @@ agent 任务可能要跑几分钟，所以发起它的请求只把任务 ID 放�
 
 打个比方，修车行的工单板：只有车修好了，才会把卡片归档；如果接这张卡片的师傅中途走开了，卡片过了规定的时间就会回到工单板上。
 
-准确地说，队列以租约的方式把每条消息交给一个 worker，在计时器（可见性超时、锁或 ack 截止时间）走完之前，不让其他 worker 看到这条消息。worker 在保存好工作成果之后才发送确认（acknowledgement，简称 ack），确认会把消息删除；租约过期就意味着重复投递，所以这是至少一次投递。
+准确地说，队列以租约的方式把每条消息交给一个 worker，在计时器（可见性超时、锁或 ack 截止时间）走完之前，不让其他 worker 看到这条消息。worker 在保存好工作成果之后发送确认（acknowledgement，简称 ack），确认会把消息删除；租约过期就意味着重复投递，所以这是至少一次投递。
 
 ## FDE 为什么需要
 
@@ -24,7 +24,7 @@ FDE 给任务设了五分钟的租约，worker 在运行期间不断续租；按
 
 只有在结果保存之后才确认。Python 任务队列 Celery 默认“在任务执行之前就即时确认”，所以运行中途被杀掉的 worker 会丢掉它的任务；要设置 `task_acks_late = True`。
 
-租约比运行时间短，就会让第二个 worker 去启动一个仍在进行中的任务，而默认值只适合短任务：SQS 把一条消息隐藏 30 秒（最长 12 小时），Azure Service Bus 把它锁定 1 分钟（最长 5 分钟）。租约保持适中，并在 worker 还活着的时候不断续租（SQS 的 `ChangeMessageVisibility`、Service Bus 的锁续期、Temporal 的 activity 心跳）。每一步的[检查点](./02-durable-execution.md)让重复投递的代价很小；[去重](./05-duplicate-execution.md)则让重复投递变得安全。
+租约比运行时间短，就会让第二个 worker 去启动一个仍在进行中的任务，而默认值适合短任务：SQS 把一条消息隐藏 30 秒（最长 12 小时），Azure Service Bus 把它锁定 1 分钟（最长 5 分钟）。把租约设得适中，并在 worker 还活着的时候不断续租（SQS 的 `ChangeMessageVisibility`、Service Bus 的锁续期、Temporal 的 activity 心跳）。每一步的[检查点](./02-durable-execution.md)让重复投递的代价很小；[去重](./05-duplicate-execution.md)则让重复投递变得安全。
 
 ### 有限的重试与死信队列
 

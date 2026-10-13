@@ -16,7 +16,7 @@ row: M3-L3.6
 
 一家旅游公司的内容系统串联了七个 agent：Research、Outline、Draft、SEO、Fact-check、Format 和 Publish。草稿无视 Outline agent 选定的切入角度，SEO agent 改写了已经过事实核查的句子，Format agent（一个干模板活儿的模型）还改了一个酒店价格。没人说得清某个错误是哪个 agent 造成的。
 
-FDE 把每一道边界都拿下面的四个理由检验了一遍。Research 保持独立：它并行搜索，返回带来源的简报，而且不能发布。Fact-check 变成只读的 Reviewer。Outline、Draft 和 SEO 合并成一个 Writer，三个角色各作为它的一个 Skill；Format 和 Publish 变成代码，放在编辑审批之后。在同一份评测集上，三个 agent 在错误、成本和速度上都胜过七个。（示例场景。）
+FDE 把每一道边界都拿下面的四个理由检验了一遍。Research 保持独立：它并行搜索，返回带来源的简报，而且不能发布。Fact-check 变成只读的 Reviewer。Outline、Draft 和 SEO 合并成一个 Writer，各自成为它的一个 Skill；Format 和 Publish 变成代码，放在编辑审批之后。在同一份评测集上，三个 agent 在错误、成本和速度上都胜过七个。（示例场景。）
 
 ## 核心概念
 

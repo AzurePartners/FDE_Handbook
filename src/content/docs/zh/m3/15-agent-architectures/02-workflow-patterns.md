@@ -10,7 +10,7 @@ row: M3-L3.2
 
 打个比方，急诊室里，分诊把每位病人分流到各自该去的地方，各项检查并行进行，手术要等检查结果通过核对才开始，就像链中的一道 gate。
 
-路径由代码固定，所以它们是[工作流，而不是 agent](./01-workflows-vs-agents.md)。如果由模型在运行时挑选子任务（orchestrator-workers），见[多 agent 系统](./04-multi-agent-systems.md)；点评循环见[审核与 critic 模式](./08-review-and-critic-patterns.md)。
+路径由代码固定，所以它们是[工作流，而不是 agent](./01-workflows-vs-agents.md)。如果由模型在运行时挑选子任务（orchestrator-workers），见[多 agent 系统](./04-multi-agent-systems.md)；评判循环见[审核与 critic 模式](./08-review-and-critic-patterns.md)。
 
 ## FDE 为什么需要
 
@@ -30,7 +30,7 @@ FDE 把它重建成了工作流。路由器给每份合同打上标签：保密�
 
 ### 并行化：分段与投票
 
-分段（sectioning）同时运行相互独立的几个部分，由代码合并：比如合同检查，或者与主回答并行、负责筛查输入的[护栏](../../m2/12-safety-guardrails-hitl/01-input-and-output-guardrails.md)。投票（voting）把同一个任务运行多次并设一个阈值，比如三项检查中只要有一项标记了某笔付款，这笔付款就被标记。各次投票必须有可能不一致，所以 Anthropic 的示例会让各次调用的提示词有所不同。自洽性（self-consistency）方面的研究（Wang 等，ICLR 2023）发现，对采样得到的多条推理路径做多数投票，可以提高准确率。
+分段（sectioning）同时运行相互独立的几个部分，由代码合并：比如合同检查，或者与主回答并行、负责筛查输入的[护栏](../../m2/12-safety-guardrails-hitl/01-input-and-output-guardrails.md)。投票（voting）把同一个任务运行多次并设一个阈值，比如只要三项检查中有一项标记了某笔付款，就标记这笔付款。各次投票必须有可能不一致，所以 Anthropic 的示例会让各次调用的提示词有所不同。自洽性（self-consistency）方面的研究（Wang 等，ICLR 2023）发现，对采样得到的多条推理路径做多数投票，提高了准确率。
 
 ### 取舍
 

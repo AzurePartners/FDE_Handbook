@@ -14,7 +14,7 @@ row: M3-L6.2
 
 ## FDE 为什么需要
 
-一家旅行公司的 planner agent 把行程交给 flight agent 和 hotel agent，它们运行在不同的 worker 上。有些行程在没订到酒店的情况下就被确认了。每个 worker 只用自己的 ID 记录最终输出，交接没有留下任何记录，结果三个团队花了一周时间反复改写提示词。
+一家旅行公司的 planner agent 把行程交给 flight agent 和 hotel agent，它们运行在不同的 worker 上。有些行程在没订到酒店的情况下就被确认了。每个 worker 只用自己的 ID 记录最终输出，交接没有留下任何记录，结果三个团队花了一周时间改写提示词。
 
 FDE 让每个行程对应一个 trace，随每条队列消息一起传递，并为每次 agent 运行、工具调用、交接 payload 和记录变更建立 span。看了第一个失败的 trace 就水落石出：planner 发出的 `04/03` 指的是 3 月 4 日，hotel agent 却读成了 4 月 3 日，查不到空房，仍然报告 `done`。（示例场景。）
 
@@ -72,7 +72,7 @@ OpenTelemetry 的生成式 AI 语义约定（状态：Development）定义了这
 <details>
 <summary>什么是 agent trace？</summary>
 
-一个任务在同一个 trace ID 下的一棵 span 树：其中是各次 agent 运行，运行里包含模型调用、工具调用、交接和状态变化，每个 span 都带有耗时、状态，以及经过脱敏的输入和输出。
+一个任务在同一个 trace ID 下的一棵 span 树：各次 agent 运行包含模型调用、工具调用、交接和状态变化，每一项都带有耗时、状态，以及经过脱敏的输入和输出。
 
 </details>
 
@@ -91,7 +91,7 @@ OpenTelemetry 的生成式 AI 语义约定（状态：Development）定义了这
 </details>
 
 <details>
-<summary>安全团队因为涉及客户数据，要求关闭追踪。你会怎么建议？</summary>
+<summary>安全团队因为涉及客户数据，要求关闭追踪。你会提议怎么做？</summary>
 
 调整记录什么，而不是记不记：元数据始终记录，内容做掩码或放进受限的短留存存储，失败的 trace 靠尾部抽样保留，同时核对供应商的默认设置，这一切都要和对方的隐私负责人商定。
 

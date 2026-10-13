@@ -38,7 +38,7 @@ OpenAI 把后两种分别称为 manager 模式（“agents as tools”）和去�
 
 ### 它们的代价：正反两方构建者的说法
 
-- **Token。** Anthropic 测得，agent 消耗的 token 约为聊天的 4 倍，多 agent 系统约为 15 倍；它们“之所以有效，主要是因为能帮助投入足够多的 token 去解决问题”。
+- **token。** Anthropic 测得，agent 消耗的 token 约为聊天的 4 倍，多 agent 系统约为 15 倍；它们“之所以有效，主要是因为能帮助投入足够多的 token 去解决问题”。
 - **延迟。** 每经过牵头 agent 中转一次，就多一次模型调用，而牵头 agent 要等最慢的那个 worker。
 - **协调失败。** Anthropic 早期的牵头 agent 会为简单的查询生成 50 个子 agent。在 Cognition 的“Don't Build Multi-Agents”（2025 年 6 月）中，子 agent 在做一个 Flappy Bird 仿制版时，做出了 Super Mario 风格的背景和一只风格不搭的鸟：“行动带有隐含的决策，而相互冲突的决策会带来糟糕的结果。”它在 2026 年 4 月的后续文章中说，一种范围更窄的模式如今行得通：agent 只贡献想法，写入则保持串行。
 - **更难调试。** 糟糕的结果可能出在任何一个 agent 或任何一次交接上，所以 [agent trace](../18-agent-evaluation-debugging/02-agent-traces.md) 必须覆盖每一个 agent。

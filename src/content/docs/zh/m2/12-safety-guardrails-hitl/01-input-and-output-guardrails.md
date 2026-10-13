@@ -46,7 +46,7 @@ FDE 会把“我们有个过滤器”换成一套设计：哪些检查在哪里�
 
 OWASP 说要把模型“当作任何其他用户”对待：它的输出不可信。
 
-- 显示文本时使用自动转义或 `textContent`。渲染的任何 Markdown 或 HTML 都要先净化（sanitize），比如用 DOMPurify，绝不直接使用原始的 `innerHTML`。
+- 显示文本时使用自动转义或 `textContent`。渲染的任何 Markdown 或 HTML 都要先净化（sanitize），比如用 DOMPurify，绝不把原始内容直接写进 `innerHTML`。
 - 绝不要把输出传给 `eval`、shell 或字符串拼接出来的 SQL；用参数化查询，或者固定的操作列表。
 - 只从白名单内的域名加载图片和链接，并配合 Content Security Policy，否则被注入的图片 URL 会在浏览器获取它时泄露数据。
 

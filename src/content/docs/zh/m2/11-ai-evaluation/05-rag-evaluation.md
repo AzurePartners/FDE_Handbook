@@ -30,7 +30,7 @@ FDE 从真实聊天记录里整理出 200 个问题，请一位专家标注标�
 | 召回率@k | 所有标准来源中，有多大比例出现在前 k 个里？ |
 | MRR（平均倒数排名） | 1 / 第一个标准来源的排名（1、1/2、1/3） |
 
-要写明 k 是多少，并且按实际送给模型的那个 k 来衡量。Ragas 和 promptfoo 中的“context recall”是 LLM 根据参考答案做出的估计，并不是 recall@k。
+要写明 k 是多少，并且按实际送给模型的那个 k 来衡量。Ragas 和 promptfoo 中的“context recall”是 LLM 根据参考答案做出的估计，并不是召回率@k。
 
 ### Groundedness
 

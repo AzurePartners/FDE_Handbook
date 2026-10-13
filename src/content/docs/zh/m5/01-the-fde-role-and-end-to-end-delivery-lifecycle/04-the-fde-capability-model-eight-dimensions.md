@@ -17,11 +17,11 @@ row: M5-L1.4
 - **Communication：** 利益相关方沟通、演示、写作（模块五）。
 - **Domain：** 对客户所在领域的了解（金融、医疗）。
 
-每个维度都能说清“好”是什么样子；不同的 FDE 岗位又侧重不同的维度（数据密集的项目偏重 Integration / Production；从零开始的顾问式项目偏重 Discovery / Communication）。
+每个维度都有“好”大致是什么样子的参照；不同的 FDE 岗位又侧重不同的维度（数据密集的项目偏重 Integration / Production；从零开始的顾问式项目偏重 Discovery / Communication）。
 
 ## FDE 为什么需要
 
-这个模型既是这个角色的地图，也是自我提升的工具：它展示完整的范围（让你不会把编码强误当成 FDE 强），让你如实评估自己的长处和短板，也帮你理解某个项目或岗位最看重什么。它还是整本手册的主线：每个模块都在培养特定的维度。
+这个模型既是这个角色的地图，也是自我提升的工具：它展示完整的范围（让你不会误以为编码强就等于 FDE 强），让你如实评估自己的长处和短板，也帮你理解某个项目或岗位最看重什么。它还是整本手册的主线：每个模块都在培养特定的维度。
 
 ## 核心概念
 
@@ -50,14 +50,14 @@ row: M5-L1.4
 <details>
 <summary>FDE 能力模型有哪些维度？</summary>
 
-Systems、AI、Agents、Integration、Production、Discovery、Communication 和 Domain。前五个偏技术（从基础一直到生产集成），后三个是咨询与背景类的能力：找到真正的问题、与利益相关方沟通、了解客户所在的领域。不同的 FDE 岗位对它们的权重不同。
+Systems、AI、Agents、Integration、Production、Discovery、Communication 和 Domain。前五个属于技术类（从基础一直到生产集成），后三个是咨询与背景类的能力：找到真正的问题、与利益相关方沟通、了解客户所在的领域。不同的 FDE 岗位对它们的权重不同。
 
 </details>
 
 <details>
 <summary>为什么这个模型对你自己的成长很重要？</summary>
 
-因为它描绘了这个角色的全貌，让我不会把编码强误当成 FDE 强。我可以据此如实评估自己在八个维度上的长处和短板，并朝着某个项目所要求的组合去成长，比如进入新行业时，把精力投到 Domain 和 Discovery 上，而不只是继续加深 Systems。
+因为它描绘了这个角色的全貌，让我不会误以为编码强就等于 FDE 强。我可以据此如实评估自己在八个维度上的长处和短板，并朝着某个项目所要求的组合去成长，比如进入新行业时，把精力投到 Domain 和 Discovery 上，而不只是继续加深 Systems。
 
 </details>
 

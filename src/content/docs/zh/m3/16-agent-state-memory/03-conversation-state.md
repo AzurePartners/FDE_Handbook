@@ -37,7 +37,7 @@ FDE 把历史移进了公司自己的 Postgres：每个聊天一行 `threads`（
 
 ### 裁剪，但不丢失记录
 
-记录会保留每一个条目，供回看和审计；你发送的视图则是最新的摘要加上最近几轮（保留什么，见[上下文工程](../../m2/08-prompting-context-structured-output/04-context-engineering.md)）。Anthropic 的 `compaction` 摘要块要原样保留，包括 `signature`。有些工具会覆盖这份记录：OpenAI 的 `OpenAIResponsesCompactionSession` 会“清除并重写会话历史”。留存期限则是[另一个问题](./07-memory-pollution-staleness-privacy.md)。
+记录会保留每一个条目，供回看和审计；你发送的视图则是最新的摘要加上最近几轮（保留什么，见[上下文工程](../../m2/08-prompting-context-structured-output/04-context-engineering.md)）。Anthropic 的 `compaction` 摘要块要原样保留，包括 `signature`。有些工具会覆盖这份记录：OpenAI 的 `OpenAIResponsesCompactionSession` 会“清除并重写会话历史”。留存则是[另一个问题](./07-memory-pollution-staleness-privacy.md)。
 
 ### 为正确的用户恢复对话 thread
 

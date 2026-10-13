@@ -6,11 +6,11 @@ row: M4-L1.1
 
 ## 是什么
 
-**MCP** 是把 AI 应用连接到外部系统的开放标准。一个 **server** 提供三类能力：**工具（tools）**（模型可以调用的操作）、**资源（resources）**（应用可以读取的数据）和 **提示词（prompts）**（可复用的工作流）。任何支持 MCP 的 **host/client** 都用同样的方式连接它，传输方式是 **stdio** 或 **Streamable HTTP**。client 在连接时进行能力协商，并在运行时发现有哪些能力可用（对工具来说，是通过一次 `tools/list` 调用）。工具调用由 *模型* 控制，规范要求人始终留在回路中，并且能够拒绝某次调用。MCP *不会* 做的，是让底层系统变得可靠或安全：MCP 工具的背后仍然是一个真实的 API，它需要凭证，可能超时，可能对你限流，也可能返回错误。MCP 统一的是 *接口*；集成中真正难的部分依然存在。
+**MCP** 是把 AI 应用连接到外部系统的开放标准。一个 **server** 提供三类能力：**工具（tools）**（模型可以调用的操作）、**资源（resources）**（应用可以读取的数据）和 **提示词（prompts）**（可复用的工作流）。任何支持 MCP 的 **host/client** 都用同样的方式连接它，传输方式是 **stdio** 或 **Streamable HTTP**。client 在连接时进行能力协商，并在运行时发现有哪些能力可用（对工具来说，是通过一次 `tools/list` 调用）。工具调用由 *模型* 控制，规范指出，人应该留在回路中，并且能够拒绝某次调用。MCP *不会* 做的，是让底层系统变得可靠或安全：MCP 工具的背后仍然是一个真实的 API，它需要凭证，可能超时，可能对你限流，也可能返回错误。MCP 统一的是 *接口*；集成中真正难的部分依然存在。
 
 ## FDE 为什么需要
 
-AI 功能越来越多地通过 MCP 接入各种工具，所以很容易以为“已经有现成的 MCP 了”就等于集成做完了。其实不然：一个封装了不稳定 API 的 MCP 工具，照样不稳定。一个 FDE 必须透过标准接口，看到底下真实的系统，并像对待原始 API 一样，处理它的认证、限流和失败。
+AI 功能越来越多地通过 MCP 接入各种工具，而且很容易以为“已经有现成的 MCP 了”就等于集成做完了。其实不然：一个封装了不稳定 API 的 MCP 工具，照样不稳定。一个 FDE 必须透过标准接口，看到底下真实的系统，并完全像对待原始 API 那样，处理它的认证、限流和失败。
 
 ## 核心概念
 
@@ -31,7 +31,7 @@ AI 功能越来越多地通过 MCP 接入各种工具，所以很容易以为“
 <details>
 <summary>MCP 统一了什么，没有统一什么？</summary>
 
-它统一的是 server 如何提供工具、资源和提示词，以及任何 client 如何发现并调用它们（通过 \`tools/list\` 列出工具，通过 \`tools/call\` 调用工具），所以任何 MCP client 都能使用任何 MCP server，不需要专门写对接代码。它不能替代对工具背后真实系统的认证、网络、限流处理和失败处理，这些仍然由集成方负责。
+它统一的是 server 如何提供工具、资源和提示词，以及任何 client 如何发现并调用它们（通过 \`tools/list\` 列出工具，通过 \`tools/call\` 调用工具），所以任何 MCP client 都能使用任何 MCP server，不需要专门写对接代码。它不能替代工具背后真实系统所需要的认证、网络、限流处理和失败处理，这些仍然由集成方负责。
 
 </details>
 
@@ -44,7 +44,7 @@ AI 功能越来越多地通过 MCP 接入各种工具，所以很容易以为“
 
 ## 延伸阅读
 
-- 文档：[What is MCP?](https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro)（官方入门介绍）
+- 文档：[What is MCP?](https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro)（官方简介）
 - 文档：[MCP architecture overview](https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture)（数据层与传输层，能力发现）
 - 文章：[Code execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp)（Anthropic；大规模使用时工具上下文的成本）
 - 课程：[MCP: Build Rich-Context AI Apps](https://www.deeplearning.ai/courses/mcp-build-rich-context-ai-apps-with-anthropic)（DeepLearning.AI，可免费旁听）

@@ -23,8 +23,8 @@ row: M4-L4.2
 
 ## 常见误区
 
-- **“所有任务都用最好的模型。”** 大多数任务用更小、便宜得多的模型就能满足；规模大的模型留给困难的情况。
-- **“上下文越多，质量越高。”** 超出相关内容的部分只会增加成本，还可能稀释答案。
+- **“所有任务都用最好的模型。”** 大多数任务用更小、便宜得多的模型就能满足；规模大的模型留给难处理的情况。
+- **“上下文越多，质量越高。”** 超出相关内容的部分会增加成本，还可能稀释答案。
 - **“成本是固定的。”** 它随 token 和用量增长；没有衡量和上限，它会悄悄涨上去。
 
 ## 典型面试题
@@ -51,4 +51,4 @@ row: M4-L4.2
 ## 相关页面
 
 - [延迟预算与并行化](./03-latency-budgets-and-parallelization.md)
-- [架构：最简单可行的方案](../../m5/05-solution-architecture-choose-the-simplest-architecture-that/01-the-architecture-decision-tree.md)
+- [架构决策树](../../m5/05-solution-architecture-choose-the-simplest-architecture-that/01-the-architecture-decision-tree.md)

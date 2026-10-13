@@ -10,11 +10,11 @@ row: M3-L3.8
 
 打个比方，建筑检查员不会轻信电工，而是对照电气规范检测线路，列出每一处不合格，再回来复查一两次。
 
-准确地说，这就是 evaluator-optimizer 循环：生成，对照标准评判，修改，重复，直到标准通过或达到上限。critic 可以是同一个模型（自我审核）、一次单独的调用或一个 Review agent，也可以是测试之类的代码。与离线给评测集打分的 [LLM 裁判](../../m2/11-ai-evaluation/07-llm-as-judge.md)不同，critic 检查线上实际处理的每一个条目，并引导它如何修改。
+准确地说，这就是 evaluator-optimizer 循环：生成，对照标准评判，修改，重复，直到标准通过或达到上限。critic 可以是同一个模型（自我审核）、一次单独的调用或一个 Review agent，也可以是测试之类的代码。与离线给评测集打分的 [LLM 裁判](../../m2/11-ai-evaluation/07-llm-as-judge.md)不同，critic 检查线上实际处理的每一个条目，并引导该条目的修改。
 
 ## FDE 为什么需要
 
-一家财富管理机构的 Content Operations 流程（Research、Plan、Draft、Review）负责撰写每周市场评论。它的 Review agent 其实就是起草用的那个模型，被告知要“把它改到完美为止”。草稿循环了五六次，成本成倍增加，因为总有某个措辞还可以再润色。但合规部门还是发现了一个年初至今的收益率与基金说明书相矛盾，而审核者从未看到过那份说明书。
+一家财富管理公司的 Content Operations 流程（Research、Plan、Draft、Review）负责撰写每周市场评论。它的 Review agent 其实就是起草用的那个模型，被告知要“改进它，直到出色为止”。草稿循环了五六次，成本成倍增加，因为总有某个措辞还可以再润色。但合规部门还是发现了一个年初至今的收益率与基金说明书相矛盾，而审核者从未看到过那份说明书。
 
 FDE 把数字和免责声明的检查挪进代码，由代码读取基金说明书里的数据；给一个独立的 critic 一份四项的、只分通过或不通过的评分标准（rubric）和调研笔记；把修改次数上限定为两次；并把仍然失败的稿件送给编辑。（示例场景。）
 
@@ -42,7 +42,7 @@ critic 返回[结构化输出](../../m2/08-prompting-context-structured-output/0
 
 ### 自我审核与独立审核者
 
-自我审核成本低，用来润色就够了。Self-Refine（Madaan 等，2023）报告在七项任务上都有提升，但 Huang 等人（ICLR 2024）发现，没有外部反馈时，模型很难修正自己的推理，有时反而变得更差。
+自我审核成本低，用来润色就够了。Self-Refine（Madaan 等，2023）报告在七项任务上都有提升，但 Huang 等（ICLR 2024）发现，没有外部反馈时，模型很难修正自己的推理，有时反而变得更差。
 
 独立的审核者有自己的 profile，有一个带着来源、而不是带着起草对话的全新上下文，使用只读工具，比如 Claude Code 示例里的 code-reviewer 子 agent（subagent），还可能换用另一个模型。
 
@@ -50,7 +50,7 @@ critic 返回[结构化输出](../../m2/08-prompting-context-structured-output/0
 
 critic 需要两样东西：一是一份明确的评分标准，其中的二元标准来自 agent 的[成功标准](../13-agent-profiles/06-agent-success-criteria.md)；二是外部信号：测试、校验器、重新计算的数字、来源。CRITIC（Gou 等，ICLR 2024）用工具检查改进了自我纠错。Anthropic 的 Agent SDK 指南把“清晰定义的规则”（并说明哪些规则没通过、原因是什么）列为最好的反馈，并把用 LLM 按模糊规则做评判称为“通常不是一种很稳健的方法”。
 
-### critic 何时不划算
+### Critic 何时不划算
 
 每一轮都要花一次评判和一次重写。关于多 agent 失败的 MAST 研究（Cemri 等，2025）发现，许多复核者只检查表面细节，比如代码能不能编译：一个生成出来的国际象棋游戏通过了审核，却没有对照国际象棋规则检查。在 [agent 评测](../18-agent-evaluation-debugging/01-agent-evaluation.md)中埋入已知的错误；如果某个 critic 抓不到任何代价高昂的错误，就把它去掉。
 

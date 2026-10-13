@@ -81,7 +81,7 @@ FDE 把每个模型调用和 API 调用都挪进了已记录的步骤，并给�
 
 ## 延伸阅读
 
-- 文章：[OpenAI Agents SDK Integration for Temporal](https://github.com/temporalio/sdk-python/tree/main/temporalio/contrib/openai_agents)（Temporal on GitHub，“Background Concepts”一节，约 8 分钟）
+- 文章：[OpenAI Agents SDK Integration for Temporal](https://github.com/temporalio/sdk-python/tree/main/temporalio/contrib/openai_agents)（Temporal on GitHub，Background Concepts，约 8 分钟）
 - 参考：[Durable orchestrations](https://learn.microsoft.com/en-us/azure/durable-task/common/durable-task-orchestrations)（Microsoft Learn，约 15 分钟）
 - 参考：[Checkpointers](https://docs.langchain.com/oss/python/langgraph/checkpointers)（LangChain docs，约 25 分钟）
 

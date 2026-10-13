@@ -2,19 +2,19 @@
 title: SKILL.md 文件与渐进式披露
 row: M3-L2.2
 ---
-**一句话：** SKILL.md 文件是打包一个 Skill 的 Markdown 文件：开头一小段头部说明这个 Skill 做什么、什么时候用，而渐进式披露（progressive disclosure）指的是 agent 只在需要时才读取其余内容。
+**一句话：** SKILL.md 文件是打包一个 Skill 的 Markdown 文件：开头有一个简短的头部，说明这个 Skill 做什么、什么时候用，而渐进式披露（progressive disclosure）指的是 agent 只在需要时才读取其余内容。
 
 ## 是什么
 
 Skill（见 [Agent Skills](./01-agent-skills.md)）是一个文件夹，其中唯一必需的文件是 `SKILL.md`。文件开头是称为 frontmatter 的头部，用 YAML（普通的 `key: value` 行）写在两行 `---` 之间；之后是用 Markdown 写的指令：步骤、示例和检查。参考文件、模板和脚本可以放在旁边。
 
-Anthropic 把 Skill 比作一本编排得当的手册：先看目录，需要时才翻开某一章或附录。
+Anthropic 把 Skill 比作一本条理清晰的手册：先看目录，需要时才翻开某一章或附录。
 
 准确地说，渐进式披露分三个层级加载一个 Skill：名称和描述始终加载，请求匹配时加载正文，只有正文指向随附文件时才加载这些文件。OpenAI 的 Codex 文档中记载的顺序与此相同。
 
 ## FDE 为什么需要
 
-一家制造企业的法务团队给合同 agent 配了一个 NDA 审阅 Skill。律师很快发现，agent 给出的批注都很笼统，完全无视公司的审查手册（playbook），而且成本在上升。trace（逐步的运行记录）揭示了原因：描述写的是“法律文件助手”，律师输入的却是“帮我批注这份保密协议”，所以这个 Skill 很少被加载；一旦加载，它那 1,700 行的 `SKILL.md` 装着整本审查手册和六个国家的规则，会多占约 20,000 个 token。（示例场景。）
+一家制造企业的法务团队给合同 agent 配了一个 NDA 审阅 Skill。律师很快发现，agent 给出的批注都很笼统，无视公司的审查手册（playbook），而且成本在上升。trace（逐步的运行记录）揭示了原因：描述写的是“法律文件助手”，律师输入的却是“帮我批注这份保密协议”，所以这个 Skill 很少被加载；一旦加载，它那 1,700 行的 `SKILL.md` 装着整本审查手册和六个国家的规则，会多占约 20,000 个 token。（示例场景。）
 
 FDE 用律师的话重写了描述，把审查手册和每个国家一份的规则文件移进 `references/`，并把触发测试加进评测集。
 
@@ -49,7 +49,7 @@ agent 通过把请求与描述相匹配来挑选 Skill，所以每条描述都�
 | 2. `SKILL.md` 正文 | 请求匹配时 | 不超过 5,000 个 token 和 500 行 |
 | 3. 参考文件、模板、脚本 | 正文指向它们时 | 打开之前不占用；脚本只返回输出 |
 
-已安装的 Skill 每次调用的开销很小（见[上下文工程](../../m2/08-prompting-context-structured-output/04-context-engineering.md)），不过 Anthropic 提醒，装得太多，agent 可能会漏掉合适的那个。参考文件要直接从 `SKILL.md` 链接；嵌套的链接可能只会被读到一部分。
+已安装的 Skill 每次调用的开销很小（见[上下文工程](../../m2/08-prompting-context-structured-output/04-context-engineering.md)），不过 Anthropic 提醒，装得太多，agent 可能会漏掉合适的那个。参考文件要直接从 `SKILL.md` 链接；嵌套的链接可能只会读到一部分。
 
 ### Skill 存放在哪里
 
@@ -59,7 +59,7 @@ agent 通过把请求与描述相匹配来挑选 Skill，所以每条描述都�
 
 各个使用入口各存一份副本，所以 Git 仍是事实来源。
 
-### 第三方 Skill 就是安装的软件
+### 第三方 Skill 就是已安装的软件
 
 Skill 的脚本和指令是以 agent 的访问权限运行的，所以 Anthropic 建议只用可信来源，并审计其中每个文件以及它会抓取的每个 URL。2026 年 2 月，研究人员报告在 OpenClaw 助手的市场 ClawHub 上发现了 341 个会窃取数据的恶意 Skill。要固定在你审查过的版本上（见 [Skill 组合与版本管理](./06-skill-composition-and-versioning.md)）。
 

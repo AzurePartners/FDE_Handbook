@@ -8,7 +8,7 @@ row: M3-L2.1
 
 [AI agent](../13-agent-profiles/01-ai-agents.md) 的 [profile](../13-agent-profiles/02-agent-profiles.md) 说明它承担哪份工作。Skill 则说明这份工作里某一项反复出现的任务该怎么做：步骤、输入、输出、检查，有时还有脚本或参考文件。
 
-打个比方，看航空公司的检查单：飞行员不会背下每一套程序，遇到相应的情形就抽出对应的检查单，而且检查单一更新，所有机组都能用上新版。
+打个比方，航空公司的检查单：飞行员不会背下每一套程序，遇到相应的情形就抽出对应的检查单，而且检查单一更新，所有机组都能用上新版。
 
 准确地说，Skill 是指令加上可选的文件，agent 通过一段简短的描述找到它，只在需要时才把它加载进自己的上下文。
 
@@ -30,7 +30,7 @@ extract-financials  把申报文件中的数字提取成固定表格
 compare-peers       与指定的同业公司对比各项比率
 summarize-call      提炼财报电话会的要点
 write-memo          按公司内部模板撰写投资备忘录
-review-memo         对照委员会评分标准（rubric）审阅备忘录草稿
+review-memo         对照委员会评分标准（rubric）审核备忘录草稿
 ```
 
 在请求用到某个 Skill 之前，agent 只能看到每个 Skill 的名称和简短描述。每个 Skill 的契约见 [Skill 输入、输出与检查](./04-skill-inputs-outputs-and-checks.md)。

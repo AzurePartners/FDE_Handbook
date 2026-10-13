@@ -10,7 +10,7 @@ row: M3-L5.6
 
 设想两个同事共用一个收件箱，却没有办法认领一封邮件：客户收到了两份答复，其中一份还推翻了另一份的承诺。
 
-准确地说，agent 拉大了读取状态与依据状态行动之间的间隔：一次模型调用要几秒，一次运行要几分钟，等待审批时有时要几天，而普通代码只需要几毫秒。MITRE 的 CWE-367 把由此产生的 bug 称为检查时到使用时（time-of-check to time-of-use，TOCTOU）竞态。记忆过期则是[另一个问题](../16-agent-state-memory/07-memory-pollution-staleness-privacy.md)。
+准确地说，agent 拉大了读取状态与依据状态行动之间的间隔：一次模型调用要几秒，一次运行要几分钟，等待审批有时甚至要几天，而普通代码只需要几毫秒。MITRE 的 CWE-367 把由此产生的 bug 称为检查时到使用时（time-of-check to time-of-use，TOCTOU）竞态。记忆过期则是[另一个问题](../16-agent-state-memory/07-memory-pollution-staleness-privacy.md)。
 
 ## FDE 为什么需要
 
@@ -41,11 +41,11 @@ def act_on(task_id, attempts=3):
     return escalate(task_id, "task kept changing")
 ```
 
-经过审批这类长时间暂停之后，在执行不可逆操作之前，要重新读取这个决策所依据的内容（状态、余额、是否已有人回复过），参见[审批暂停](./07-durable-human-approval.md)。
+经过审批这类长时间暂停之后，要先重新读取这个决策所依据的内容（状态、余额、是否已有人回复过），再执行不可逆操作（[审批暂停](./07-durable-human-approval.md)）。
 
 ### 运行期间到来的消息
 
-LangChain 的 LangSmith Deployment 把这种情况叫作“double texting”，并提供四种策略：enqueue（默认：排到下一个运行）、reject、interrupt（停止，保留进度，加入新输入）和 rollback（丢弃这次运行，重新开始）。Anthropic 的 Claude Managed Agents（beta）会把事件排在先前的事件后面，并接受 `user.interrupt`。只要在有更新的消息等待期间不发出回复，排队就适合大多数聊天场景；interrupt 只在步骤之间使用，因为在工具调用中途停下，可能留下做了一半的操作。对连发的消息做防抖，属于[有界执行](./04-bounded-execution.md)。
+LangChain 的 LangSmith Deployment 把这种情况叫作“double texting”，并提供四种策略：enqueue（默认：接下来运行它）、reject、interrupt（停止，保留进度，加入新输入）和 rollback（丢弃这次运行，重新开始）。Anthropic 的 Claude Managed Agents（测试版）会把事件排在先前的事件后面，并接受 `user.interrupt`。只要在有更新的消息等待期间不发出回复，排队就适合大多数聊天场景；interrupt 只在步骤之间使用，因为在工具调用中途停下，可能留下做了一半的操作。对连发的消息做防抖，属于[有界执行](./04-bounded-execution.md)。
 
 ## 常见误区
 

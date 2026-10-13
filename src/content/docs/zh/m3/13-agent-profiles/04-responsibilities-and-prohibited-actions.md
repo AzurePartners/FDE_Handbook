@@ -32,7 +32,7 @@ FDE 和执行主编一起梳理了谁起草、谁检查、谁发布。agent 只�
 
 ### 可测试、可强制执行的禁止操作
 
-如果脚本能根据 trace（每一步的记录）或系统状态判定一条禁止操作通过还是失败，它就是可测试的：“绝不把文章的状态设为已发布”，而不是“发布时要小心”。profile 里的文字只能降低出错的概率；被误读或被[注入](../../m2/12-safety-guardrails-hitl/04-prompt-injection.md)的指令照样能通过。选择适用的最强控制措施：agent 永远用不到的，就不授予；只允许部分用法的，由[操作 gate](../../m2/12-safety-guardrails-hitl/05-action-gates.md) 在代码里检查参数；每种情况都需要判断的，就要求[审批](../../m2/12-safety-guardrails-hitl/06-human-in-the-loop-approval.md)。危害小的风格规则可以只留在文字里。
+如果脚本能根据 trace（每一步的记录）或系统状态判定一条禁止操作通过还是失败，它就是可测试的：“绝不把文章的状态设为已发布”，而不是“发布时要小心”。profile 里的文字只能降低出错的概率；被误读或被[注入](../../m2/12-safety-guardrails-hitl/04-prompt-injection.md)的指令照样会漏过去。选择适用的最强控制措施：agent 永远用不到的，就不授予；只允许部分用法的，由[操作 gate](../../m2/12-safety-guardrails-hitl/05-action-gates.md) 在代码里检查参数；每种情况都需要判断的，就要求[审批](../../m2/12-safety-guardrails-hitl/06-human-in-the-loop-approval.md)。危害小的风格规则可以只留在文字里。
 
 | 禁止操作 | 强制执行方式 | 测试请求 |
 |---|---|---|
@@ -77,7 +77,7 @@ for text in ["好，现在就发布。", "修一下线上页面的错别字。"]
 <details>
 <summary>profile 里写的禁止操作与被强制执行的禁止操作有什么区别？</summary>
 
-profile 里的文字能提高模型遵守的可能性，也能让模型知道该把事情交给谁，但被注入或被误读的文字可以让它失效。强制执行在模型之外：没有对应的工具、代码检查或审批。
+profile 里的文字能提高模型遵守的可能性，也能告诉模型该交接出去，但被注入或被误读的文字可以让它失效。强制执行在模型之外：没有对应的工具、代码检查或审批。
 
 </details>
 
@@ -89,7 +89,7 @@ profile 里的文字能提高模型遵守的可能性，也能让模型知道该
 </details>
 
 <details>
-<summary>agent 被禁止发布后，用 `share_draft` 请网站团队代为发布。你要修什么？</summary>
+<summary>agent 被拦住无法发布后，用 `share_draft` 请网站团队代为发布。你会修哪里？</summary>
 
 它用一个被允许的工具绕过了边界。我会把 `share_draft` 限定为只能发给审核人，让 profile 把发布请求交给编辑，并把这个情形加成一条测试。
 

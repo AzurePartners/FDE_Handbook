@@ -8,13 +8,13 @@ row: M3-L1.5
 
 医院检验科就是这样工作的：标签不全的样本会被退回并说明原因，结果标明是最终报告还是初步报告，某项数值超出危急值界限时，会打电话通知病房。
 
-agent 的 [profile](./02-agent-profiles.md) 声明的是同样的接口。**输入** 是有名字的字段，每个字段要么必填、要么可选，并带有来源和字段缺失时的处理规则。**输出** 是一个有名字的交付物，结构固定，同时带有 **状态**，说明它是否已完成。**升级条件** 是可观察的触发条件，每个都有一个接收方，也就是接下来做决定的人、队列或 agent。
+agent 的 [profile](./02-agent-profiles.md) 声明的是同样的接口。**输入** 是有名字的字段，每个字段要么必填、要么可选，并带有来源和字段缺失时的处理规则。**输出** 是一个有名字的交付物，结构固定，同时带有**状态**，说明它是否已完成。**升级条件** 是可观察的触发条件，每个都有一个接收方，也就是接下来做决定的人、队列或 agent。
 
 ## FDE 为什么需要
 
 一家软件供应商的销售团队让一个 agent 回答客户的安全问卷。面对一家银行时，agent 假定这家银行用的是 Enterprise 套餐，答应了只有法务才能批准的可用性承诺，编造了政策库里没有的答案，还跳过了解析器读不出来的一个工作表。银行的律师后来把这些答案当作承诺引用。（示例场景。）
 
-FDE 声明了必填输入（其中包括套餐）、一个每条答案附有来源、并带有状态的 `questionnaire_response`，以及五个带接收方的升级触发条件。下一份问卷回复的状态是 `partial`：212 条有来源的答案，加两个未决问题，每个都带着原因转给了相应的接收方。
+FDE 声明了必填输入（其中包括套餐）、一个 `questionnaire_response`（每条答案附有来源，并带有状态），以及五个带接收方的升级触发条件。下一份问卷回复的状态是 `partial`：212 条有来源的答案，加两个未决问题，每个都带着原因转给了相应的接收方。
 
 ## 核心概念
 
@@ -38,9 +38,9 @@ FDE 声明了必填输入（其中包括套餐）、一个每条答案附有来�
 }
 ```
 
-代码按状态分流：`done` 进入下一步，`needs_input` 回到需求方，`escalated` 交给接收方，`partial` 交给审核人。[结构化输出](../../m2/08-prompting-context-structured-output/06-structured-output.md)用来强制这个结构；agent SDK 都支持最终输出 schema（Claude Agent SDK 的 `output_format`、OpenAI Agents SDK 的 `output_type`、Google ADK 的 `output_schema`）。
+代码按状态分流：`done` 进入下一步，`needs_input` 回到需求方，`escalated` 交给接收方，`partial` 交给审核人。[结构化输出](../../m2/08-prompting-context-structured-output/06-structured-output.md)用来强制这个结构；agent SDK 支持最终输出 schema（Claude Agent SDK 的 `output_format`、OpenAI Agents SDK 的 `output_type`、Google ADK 的 `output_schema`）。
 
-### 升级条件应当是可观察的触发条件
+### 把升级条件写成可观察的触发条件
 
 “拿不准就升级”无法测试；“没有找到已批准的答案”则可以。
 

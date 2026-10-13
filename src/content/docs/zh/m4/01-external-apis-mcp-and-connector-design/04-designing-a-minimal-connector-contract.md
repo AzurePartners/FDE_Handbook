@@ -10,7 +10,7 @@ row: M4-L1.4
 
 ## FDE 为什么需要
 
-集成中的大多数痛苦都来自模糊的边界：某个工具的错误没写在文档里，认证是隐含的，限流又出乎意料。把契约明确写出来，就是逼着你把这些决定都做出来，也让模型和日后的维护者有了可以放心调用的依据。它还让供应商可以互换（任何符合契约的实现都行），并把供应商特有的行为挡在业务逻辑之外。
+集成中大多数让人头疼的问题都来自模糊的边界：某个工具的错误没写在文档里，认证是隐含的，限流又出乎意料。把契约明确写出来，就是逼着你把这些决定都做出来，也让模型和日后的维护者有了可以放心调用的依据。它还让供应商可以互换（任何符合契约的实现都行），并把供应商特有的行为挡在业务逻辑之外。
 
 ## 核心概念
 
@@ -32,7 +32,7 @@ Connector: get_customer(customer_id: string)   # 输入
 
 - **“直接把原始 API 暴露出去就行。”** 原始 API 会泄露供应商特有的行为和没有文档的错误；契约能保护调用方。
 - **“错误不需要定义。”** 没有定义的错误，正是集成静默失败的地方；要逐一列出它们以及应有的反应。
-- **“暴露的接口面越大越好。”** 最小的契约更容易被正确使用，也更容易重新实现；只暴露需要的部分。
+- **“暴露的接口面越大越好。”** 最小的契约更容易用对，也更容易重新实现；只暴露需要的部分。
 
 ## 典型面试题
 
@@ -53,7 +53,7 @@ Connector: get_customer(customer_id: string)   # 输入
 ## 延伸阅读
 
 - 文档：[Build an MCP server (getting started)](https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro)（然后按“Develop with MCP”往下读）
-- 文章：[Writing effective tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents)（和 agent 一起评测这个工具）
+- 文章：[Writing effective tools for agents](https://www.anthropic.com/engineering/writing-tools-for-agents)（用 agent 来评测这个工具）
 - 课程：[DeepLearning.AI MCP course](https://www.deeplearning.ai/courses/mcp-build-rich-context-ai-apps-with-anthropic)（构建并部署你自己的 server）
 
 ## 相关页面
