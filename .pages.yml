@@ -157,6 +157,50 @@ content:
           primary: title
           fields: [title, row]
         fields: *page-fields
+      - name: zh-m2
+        label: "M2 · AI 应用工程"
+        type: collection
+        path: src/content/docs/zh/m2
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: zh-m3
+        label: "M3 · Agent 工程：从提示词到可扩展的 agent 系统"
+        type: collection
+        path: src/content/docs/zh/m3
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: zh-m4
+        label: "M4 · 企业集成与生产级 AI"
+        type: collection
+        path: src/content/docs/zh/m4
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
+      - name: zh-m5
+        label: "M5 · FDE 需求发现、咨询与交付"
+        type: collection
+        path: src/content/docs/zh/m5
+        subfolders: true
+        filename: "{primary}.md"
+        view:
+          layout: tree
+          primary: title
+          fields: [title, row]
+        fields: *page-fields
       - name: zh-m6
         label: "M6 · 四个代表性 FDE 用例原型"
         type: collection
