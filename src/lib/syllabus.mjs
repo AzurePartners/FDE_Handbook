@@ -7,6 +7,8 @@
 //   practice rows that have no page, intro text                       ← src/data/syllabus.json
 //
 // Used by the /syllabus page, the CSV download, the Google Sheet mirror and the content checks.
+// With lang 'zh' (the /zh/syllabus page), rows show the 中文 page's title, summary and resources,
+// and modules and lessons their name_zh / label_zh; text with no 中文 source stays English.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -14,6 +16,7 @@ import YAML from 'yaml';
 import { syllabusLessons, moduleHours, formatHours } from './modules.mjs';
 
 const DOCS = 'src/content/docs';
+const ZH = 'zh';
 const ROW = /^M(\d)-L(\d+)\.(\d+)$/;
 
 const readJson = (root, file) => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
@@ -28,20 +31,36 @@ const plain = (md) =>
     .replace(/\s+/g, ' ')
     .trim();
 
-function readPage(root, file) {
+// The "In one sentence" line and the "Learn more" section, per page language.
+const SECTIONS = {
+  en: { summary: /^\*\*In one sentence:\*\*\s*(.+)$/m, learnMore: /^## Learn more\n([\s\S]*?)(?=^## |(?![\s\S]))/m },
+  zh: { summary: /^\*\*一句话：\*\*\s*(.+)$/m, learnMore: /^## 延伸阅读\n([\s\S]*?)(?=^## |(?![\s\S]))/m },
+};
+
+function readPage(root, file, lang = 'en') {
   const text = fs.readFileSync(file, 'utf8');
   const m = text.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
   if (!m) return null;
   const fm = YAML.parse(m[1]) ?? {};
   const body = m[2];
-  const summary = body.match(/^\*\*In one sentence:\*\*\s*(.+)$/m)?.[1] ?? '';
-  const learnMore = body.match(/^## Learn more\n([\s\S]*?)(?=^## |(?![\s\S]))/m)?.[1] ?? '';
+  const summary = body.match(SECTIONS[lang].summary)?.[1] ?? '';
+  const learnMore = body.match(SECTIONS[lang].learnMore)?.[1] ?? '';
   const resources = [...learnMore.matchAll(/^[-*] (.+)$/gm)].map(([, item]) => ({
     text: plain(item),
     urls: [...item.matchAll(/\]\((https?:[^)\s]+)\)/g)].map((u) => u[1]),
   }));
   const id = path.relative(path.join(root, DOCS), file).split(path.sep).join('/').replace(/\.md$/, '');
   return { id, file, title: fm.title ?? '', row: fm.row ?? '', rows: fm.rows ?? [], summary: plain(summary), resources };
+}
+
+// The 中文 page in place of an English one, keeping the English page's rows; any part the
+// translation lacks (or a missing translation) falls back to English.
+function localize(root, page) {
+  const file = path.join(root, DOCS, ZH, `${page.id}.md`);
+  const zh = fs.existsSync(file) && readPage(root, file, 'zh');
+  if (!zh) return page;
+  return { ...page, id: zh.id, file, title: zh.title || page.title, summary: zh.summary || page.summary,
+    resources: zh.resources.length ? zh.resources : page.resources };
 }
 
 function walk(dir) {
@@ -64,17 +83,19 @@ const byRow = (a, b) => {
 const resourceText = (r) => `• ${r.text}${r.urls.length ? ` — ${r.urls.join(' · ')}` : ''}`;
 
 /**
- * @param {{ root?: string }} [opts]
+ * @param {{ root?: string, lang?: 'en' | 'zh' }} [opts]
  * @returns {{ syllabus: object, problems: string[] }}
  */
-export function buildSyllabus({ root = process.cwd() } = {}) {
+export function buildSyllabus({ root = process.cwd(), lang = 'en' } = {}) {
+  const zh = lang === 'zh';
   const { modules } = readJson(root, 'src/data/modules.json');
   const meta = readJson(root, 'src/data/syllabus.json');
   const problems = [];
 
   // English pages only; 中文 pages share their English page's row.
-  const pages = modules.flatMap((m) => walk(path.join(root, DOCS, m.dir))).map((f) => readPage(root, f)).filter(Boolean);
-  pages.sort((a, b) => a.id.localeCompare(b.id));
+  const pages = modules.flatMap((m) => walk(path.join(root, DOCS, m.dir))).map((f) => readPage(root, f)).filter(Boolean)
+    .sort((a, b) => a.id.localeCompare(b.id))
+    .map((p) => (zh ? localize(root, p) : p));
 
   const rows = new Map(); // row → { row, pages, practice?, topics?, resources? }
   const entry = (row) => rows.get(row) ?? rows.set(row, { row, pages: [] }).get(row);
@@ -88,17 +109,17 @@ export function buildSyllabus({ root = process.cwd() } = {}) {
 
   const out = modules.map((m) => {
     const mNum = Number(m.code.slice(1));
-    const firstPage = pages.find((p) => p.id.startsWith(`${m.dir}/`));
+    const firstPage = pages.find((p) => p.id.startsWith(`${zh ? `${ZH}/` : ''}${m.dir}/`));
     const lessons = syllabusLessons(m).map((l) => ({
       lesson: l.lesson,
       dir: l.dir,
-      title: l.label,
+      title: (zh && l.label_zh) || l.label,
       outcomes: l.outcomes ?? '',
       minHours: l.minHours,
       maxHours: l.maxHours,
       rows: [],
     }));
-    return { code: m.code, dir: m.dir, number: mNum, name: m.name, goal: m.goal ?? '', purpose: m.purpose ?? '',
+    return { code: m.code, dir: m.dir, number: mNum, name: (zh && m.name_zh) || m.name, goal: m.goal ?? '', purpose: m.purpose ?? '',
       notes: m.notes ?? '', ...moduleHours(m), firstPage: firstPage?.id, lessons };
   });
 
