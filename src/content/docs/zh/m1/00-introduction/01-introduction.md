@@ -3,23 +3,9 @@ title: 导言
 ---
 **一句话：** 本手册列出前线部署工程师（FDE）应当掌握的软件系统知识，每页一个主题，帮你看清全貌、补上短板，并在面试前把所有内容过一遍。
 
-## FDE 是什么
-
-模块 0 介绍了这个岗位；如果还没读过，请先看 [前线部署工程师](../../m0/01-what-is-an-fde/01-forward-deployed-engineer.md)。
-
-AI 公司纷纷设立这个岗位，原因很简单：模型本身对银行或医院毫无用处，除非有人把它接入对方的数据、工具、权限和工作流。最近的招聘启事里反复出现同样的说法：
-
-| 公司 | 岗位职责（摘自招聘启事） |
-|---|---|
-| Anthropic | “在客户系统内部工作，基于 Claude 模型构建生产级应用” |
-| OpenAI | 负责“需求发现、技术范围界定、系统设计、构建以及生产上线” |
-| Palantir | 数据集成、代码审查，以及“生产系统的维护与监控” |
-
-2026 年 7 月，Microsoft 成立了 Frontier Company，这是一个投入 25 亿美元、拥有 6,000 名专家的部门，专家们直接驻扎在客户组织内部工作。Microsoft 称这种做法比 FDE 模式走得更远。
-
 ## 模块 1 的定位
 
-模块 0 讲的是岗位本身，需要最先读。模块 1 是第一个技术模块。客户环境往往一团乱：数据躺在老旧的数据库里，API 会超时，权限会挡住访问，在笔记本上跑得好好的演示，到了客户服务器上就出问题。你脑子里没有画面，就修不好问题。模块 1 给你这幅画面：一个请求如何穿过系统，系统之间如何交换数据，代码如何被追踪和测试，如何部署，以及在真实使用中哪里会出问题。有了这幅画面，AI 编程工具的价值会大得多，因为你能告诉 AI 要做什么，也能检查它做得对不对。
+[模块 0](../../m0/00-introduction/01-introduction.md) 讲的是岗位本身，需要最先读。模块 1 是第一个技术模块。客户环境往往一团乱：数据躺在老旧的数据库里，API 会超时，权限会挡住访问，在笔记本上跑得好好的演示，到了客户服务器上就出问题。你脑子里没有画面，就修不好问题。模块 1 给你这幅画面：一个请求如何穿过系统，系统之间如何交换数据，代码如何被追踪和测试，如何部署，以及在真实使用中哪里会出问题。有了这幅画面，AI 编程工具的价值会大得多，因为你能告诉 AI 要做什么，也能检查它做得对不对。
 
 ## 如何使用本手册
 
@@ -43,12 +29,6 @@ AI 公司纷纷设立这个岗位，原因很简单：模型本身对银行或�
 | 6. 可靠性与规模 | 演示遇到真实用户时会出什么问题：队列、重试、重复、缓存、负载 |
 
 当前第一版只有文字。视频、测验、演示和实验之后会陆续加到这些页面中。
-
-## 延伸阅读
-
-- 文章：[Forward Deployed Engineers](https://newsletter.pragmaticengineer.com/p/forward-deployed-engineers)（The Pragmatic Engineer，部分内容需付费）
-- 文章：[A Day in the Life of a Palantir Forward Deployed Software Engineer](https://blog.palantir.com/a-day-in-the-life-of-a-palantir-forward-deployed-software-engineer-45ef2de257b1)（Palantir，FDE 的一天）
-- 文章：[Microsoft Frontier Company announcement](https://blogs.microsoft.com/blog/2026/07/02/microsoft-frontier-company-ai-engineering-that-amplifies-and-protects-your-intelligence/)（Microsoft，2026 年 7 月发布；[CNBC](https://www.cnbc.com/2026/07/02/microsoft-commits-2point5-billion-6000-employees-ai-implementation-unit.html) 也有报道）
 
 ## 相关页面
 
